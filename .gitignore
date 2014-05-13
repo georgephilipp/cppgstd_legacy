@@ -1,0 +1,8 @@
+*.so
+*.dylib
+*nbobj*
+*nbproject*
+*VS_*
+*~
+_doc*
+*.DS_Store

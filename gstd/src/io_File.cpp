@@ -1,0 +1,182 @@
+#include "stdafx.h"
+
+#include "File.h"
+#include "Printer.h"
+#include "Reader.h"
+#include "Timer.h"
+#include "Writer.h"
+
+namespace msii810161816
+{
+	namespace gstd
+	{
+		namespace file
+		{
+			int fileOpenBufferReps = 1;
+			double fileOpenBufferDelay = 0.1;
+
+			std::string joinpaths(std::string path1, std::string path2)
+			{
+				if (path2.length() > 0)
+					gstd::check(path2.at(0) != '/' && path2.at(0) != '\\', "path2 does not seem to be a relative path. Please check!");
+				if (path1.at(path1.length() - 1) == '/' || path1.at(path1.length() - 1) == '\\')
+				{
+					return path1 + path2;
+				}
+				else
+					return path1 + "/" + path2;
+			}
+
+			void remove(std::vector<std::string> paths, bool enforceBefore, bool enforceAfter)
+			{
+				int size = paths.size();
+				if (enforceBefore)
+				{
+					std::vector<bool> existsBefore = gstd::Reader::verifyExistence(paths);
+					for (int i = 0; i < size;i++)
+						gstd::check(existsBefore[i], "cannot remove file that does not exist : filname is " + paths[i]);
+				}
+				for (int i = 0; i < size; i++)
+			    	::remove(paths[i].c_str());
+				if (!enforceAfter)
+					return;
+				std::vector<bool> remains(size, true);
+				for (int j = 0; j < gstd::file::fileOpenBufferReps; j++)
+				{
+					if (j > 0)
+					{
+						for (int i = 0; i < size; i++)
+						{
+							if (remains[i])
+								::remove(paths[i].c_str());
+						}
+					}
+					remains = gstd::Reader::verifyExistence(paths); //this call could lead to quadratic blowup in waiting time in theory, but we'll leave it until it becomes an issue
+					bool removedall = true;
+					for (int i = 0; i < size; i++)
+					{
+						if (remains[i])
+							removedall = false;
+					}
+					if (!removedall)
+						gstd::Timer::sleep(gstd::file::fileOpenBufferDelay);
+					else
+						return;
+				}
+				for (int i = 0; i < size; i++)
+					gstd::check(!remains[i], "could not remove file " + paths[i]);
+			}
+
+			std::string getTestFileName()
+			{
+				gstd::Printer::c("Note!!! file::getTestFileName() is using an absolute filepath which will only work on my computer, not yours!");
+#ifdef _WIN32
+				return "C:/Users/gschoenh/Dropbox/Code/cpp/libs/gstd/src/FileTestFile.txt";
+#else
+				return "/usr0/home/gschoenh/Dropbox/Code/cpp/libs/gstd/src/FileTestFile.txt";
+#endif
+			}
+
+			bool test()
+			{
+				gstd::Printer::c("This is a test for group of functions gstd::file");
+
+				//joinpaths
+				{
+					std::string start1 = "/bla/bla";
+					std::string start2 = "bling";
+					std::string target = "/bla/bla/bling";
+					if (joinpaths(start1, start2) != target)
+					{
+						gstd::Printer::c("Test failed on function joinpaths");
+						return false;
+					}
+					start1 = "/bla/bla/";
+					target = "/bla/bla/bling";
+					if (joinpaths(start1, start2) != target)
+					{
+						gstd::Printer::c("Test failed on function joinpaths");
+						return false;
+					}
+					start1 = "/bla/bla\\";
+					target = "/bla/bla\\bling";
+					if (joinpaths(start1, start2) != target)
+					{
+						gstd::Printer::c("Test failed on function joinpaths");
+						return false;
+					}
+					start2 = "/bling";
+					try
+					{
+						gstd::Printer::c("Expecting error message ...");
+						joinpaths(start1, start2);
+						gstd::Printer::c("Test failed on function joinpaths");
+						return false;
+					}
+					catch (std::exception e) {}
+					start2 = "\\bling";
+					try
+					{
+						gstd::Printer::c("Expecting error message ...");
+						joinpaths(start1, start2);
+						gstd::Printer::c("Test failed on function joinpaths");
+						return false;
+					}
+					catch (std::exception e) {}
+				}
+
+				//remove
+				{
+					std::string testFileName = getTestFileName();
+					try
+					{
+						gstd::Printer::c("Expecting error message ...");
+						remove({ testFileName }, true, false);
+						gstd::Printer::c("Test failed on test 1 of function remove");
+						return false;
+					}
+					catch (std::exception e) {}
+					try
+					{
+						remove({ testFileName }, false, false);
+					}
+					catch (std::exception e)
+					{
+						gstd::Printer::c("Test failed on test 2 of function remove");
+						return false;
+					}
+					gstd::Writer::w(testFileName, "bling", false, std::ios::trunc);
+					try
+					{
+						remove({ testFileName }, true, true);
+						gstd::check(!gstd::Reader::exists(testFileName), "");
+					}
+					catch (std::exception e)
+					{
+						gstd::Printer::c("Test failed on test 3 of function remove");
+						return false;
+					}
+					gstd::Writer::w(testFileName, "bling", false, std::ios::trunc);
+					try
+					{
+						gstd::Timer t;
+						remove({ testFileName, testFileName, testFileName }, true, true);
+						gstd::Printer::c(file::fileOpenBufferDelay*((double)(file::fileOpenBufferReps - 1)));
+						gstd::Printer::c(file::fileOpenBufferDelay*((double)file::fileOpenBufferReps));
+						t.t();
+						gstd::check(t.t(false) > file::fileOpenBufferDelay*((double)(file::fileOpenBufferReps - 1)) && t.t(false) < file::fileOpenBufferDelay*((double)file::fileOpenBufferReps), "");
+						gstd::check(!gstd::Reader::exists(testFileName), "");
+					}
+					catch (std::exception e)
+					{
+						gstd::Printer::c("Test failed on test 4 of function remove");
+						return false;
+					}
+				}
+				return true;
+			}
+
+
+		}
+	}
+}
