@@ -60,6 +60,15 @@ namespace msii810161816
         
         int Rand::i(int max)
         {
+			if (max > RAND_MAX)
+			{
+				int factor = i(max / RAND_MAX + 1);
+				int remainder = i(RAND_MAX);
+				if (factor == max / RAND_MAX && remainder >= max % RAND_MAX)
+					return i(max);
+				else
+					return factor * RAND_MAX + remainder;
+			}
             int ratio = RAND_MAX / max;
             int draw = rand();
             if(draw / max == ratio)
@@ -234,6 +243,64 @@ namespace msii810161816
                     reportFailure("2");
                     return false;
                 }
+			std::vector<int> scales = { 1000, RAND_MAX - 10, RAND_MAX / 2 + 10, 1000000000 };
+			int numrepl = 10;
+			std::vector<double> dscales;
+			for (int j = 0; j < (int)scales.size(); j++)
+				dscales.push_back((double)scales[j]);
+			for (int j = 0; j < (int)scales.size(); j++)
+			{
+				gstd::Printer::c("Staring random integer test " + gstd::Printer::p(j) + " on scale " + gstd::Printer::p(scales[j]));
+				double sum = 0;
+				double sumsquares = 0;
+				bool top = false;
+				bool exceed = false;
+				bool zero = false;
+				for (int k = 0; k < scales[j]; k++)
+				{
+					if (k % 10000000 == 0 && k > 0)
+						gstd::Printer::c(k);
+					for (int l = 0; l < numrepl; l++)
+					{
+						int draw = i(scales[j]);
+						if (scales[j] - 1 == draw)
+							top = true;
+						if (draw == 0)
+							zero = true;
+						if (draw >= scales[j])
+							exceed = true;
+						sum += (double)draw;
+						sumsquares += ((double)draw)*((double)draw);
+					}
+				}
+				double sumtarget = (dscales[j]-1) / 2 * dscales[j] * numrepl;
+				double sumsquaretarget = (dscales[j] - 1) * (2 * dscales[j] - 1) / 6 * dscales[j] * numrepl;
+				if (!top)
+				{
+					reportFailure("top not returned on scale iteration " + gstd::Printer::p(j) + " scale " + gstd::Printer::p(scales[j]));
+					return false;
+				}
+				if (!zero)
+				{
+					reportFailure("zero not returned on scale iteration " + gstd::Printer::p(j) + " scale " + gstd::Printer::p(scales[j]));
+					return false;
+				}
+				if (exceed)
+				{
+					reportFailure("top exceeded on scale iteration " + gstd::Printer::p(j) + " scale " + gstd::Printer::p(scales[j]));
+					return false;
+				}
+				if (abs(sum - sumtarget) / sumtarget > 0.1)
+				{
+					reportFailure("sum not within bound on scale iteration " + gstd::Printer::p(j) + " scale " + gstd::Printer::p(scales[j]));
+					return false;
+				}
+				if (abs(sumsquares - sumsquaretarget) / sumsquaretarget > 0.1)
+				{
+					reportFailure("sum not within bound on scale iteration " + gstd::Printer::p(j) + " scale " + gstd::Printer::p(scales[j]));
+					return false;
+				}
+			}
             
             //test d
             int nummodes = 5;
