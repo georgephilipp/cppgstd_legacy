@@ -9,6 +9,7 @@
 #include"Model.h"
 #include "Datapoints.h"
 #include "gstd/src/MatlabMgr.h"
+#include <math.h>
 
 namespace msii810161816
 {

@@ -15,6 +15,7 @@
 #include "Client.h"
 #include "gstd/src/Primitives.h"
 #include "gstd/src/Stat.h"
+#include <math.h>
 
 namespace msii810161816
 {

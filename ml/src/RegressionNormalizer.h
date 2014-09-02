@@ -15,6 +15,7 @@
 #include"Data/src/Client.h"
 #include "gstd/src/Primitives.h"
 #include "RegressionGenerators.h"
+#include <math.h>
 
 namespace msii810161816
 {   
