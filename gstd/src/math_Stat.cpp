@@ -389,7 +389,7 @@ namespace msii810161816
                         double compare = 1/sqrt(2*M_PI)*exp(-testpoints[i]*testpoints[i]/2);
                         if(!gstd::Double::equals(deriv,compare,1e-7,true)) // gradient is a bit wobbly
                         {
-                            gstd::Printer::c("test failed on function normcum");
+                            gstd::reportFailure("gstd::stat::normcum");
                             return false;
                         }
                     }                    
@@ -404,7 +404,7 @@ namespace msii810161816
                         double output = normcum(normcuminv(testpoints[i]));
                         if(!gstd::Double::equals(testpoints[i], output, 1e-8, true)) //this is not as good as I had hoped (at least is doesn't do worse on the tails)
                         {
-                            gstd::Printer::c("test failed on function normcuminv");
+                            gstd::reportFailure("gstd::stat::normcuminv");
                             return false;
                         }
                     }
@@ -435,7 +435,7 @@ namespace msii810161816
                             || !gstd::Double::equals(fourth/second/second-3, 0, 0.2, false)
                         )
                     {
-                        gstd::Printer::c("test failed on function randnorm");
+                        gstd::reportFailure("gstd::stat::randnorm");
                         return false;
                     }
                 }      
@@ -445,7 +445,7 @@ namespace msii810161816
                     std::vector<double> datamatrix = {2, 0, 0, 4, 2, 4, 0, 0};
                     if(!gstd::Linalg::mequals(covarianceMatrix(4,2,datamatrix), {1,0,0,4}))
                     {
-                        gstd::Printer::c("test failed on function covarianceMatrix");
+                        gstd::reportFailure("gstd::stat::covarianceMatrix");
                         return false;
                     }
 				}
@@ -458,7 +458,7 @@ namespace msii810161816
 						|| !gstd::Double::equals(meanVar.second, 6.0/5.0)
 						)
 					{
-						gstd::Printer::c("test failed on function meanAndVar");
+						gstd::reportFailure("gstd::stat::meanAndVar");
 						return false;
 					}
 				}
@@ -495,7 +495,7 @@ namespace msii810161816
 					{
 						if (mbins[j] < 700 || mbins[j] > 1300 || vbins[j] < 700 || vbins[j] > 1300)
 						{
-							gstd::Printer::c("test failed on function meanPval / varPval");
+							gstd::reportFailure("gstd::stat::meanPval or gstd::stat::varPval");
 							return false;
 						}
 					}
@@ -512,7 +512,7 @@ namespace msii810161816
 					double target2 = 3.996 / 0.8*0.021;
 					if (!gstd::Double::equals(res1,target1,1e-12) || !gstd::Double::equals(res2,target2,1e-12))
 					{
-						gstd::Printer::c("test failed on function combineTestPs");
+						gstd::reportFailure("gstd::stat::combineTestPs");
 						return false;
 					}
 				}

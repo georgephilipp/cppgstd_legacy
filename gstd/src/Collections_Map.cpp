@@ -31,7 +31,7 @@ namespace msii810161816
                         std::vector<int> target = {0,1,2};
                         if(keys(input) != target)
                         {
-                            gstd::Printer::c("test failed on function keys");
+                            gstd::reportFailure("gstd::map::keys");
                             return false;
                         }
                     }
@@ -47,7 +47,7 @@ namespace msii810161816
                         std::vector<double> target = {0.0,1.1,2.2};
                         if(values(input) != target)
                         {
-                            gstd::Printer::c("test failed on function values");
+                            gstd::reportFailure("gstd::map::values");
                             return false;
                         }
                     }
@@ -63,7 +63,7 @@ namespace msii810161816
 						std::vector<double> input = { 0.0, 1.1, 2.2 };
 						if (create(input) != target)
 						{
-							gstd::Printer::c("test failed on function create (single vector)");
+							gstd::reportFailure("gstd::map::create (single vector)");
 							return false;
 						}
 					}
@@ -80,7 +80,7 @@ namespace msii810161816
 					std::vector<double> output = { 2.2, 1.1, 3.3, 0 };
 					if (create(input, output) != target)
 					{
-						gstd::Printer::c("test failed on function create (two vectors)");
+						gstd::reportFailure("gstd::map::create (two vectors)");
 						return false;
 					}				
 				}
@@ -96,7 +96,7 @@ namespace msii810161816
                         std::vector<double> input = {0.0,1.1,2.2};
                         if(invertVector(input) != target)
                         {
-                            gstd::Printer::c("test failed on function invertVector");
+                            gstd::reportFailure("gstd::map::invertVector");
                             return false;
                         }
                     }
@@ -117,14 +117,14 @@ namespace msii810161816
                         std::vector<int> unique = gstd::vector::unique(vals);
                         if((int)unique.size() != 3)
                         {
-                            gstd::Printer::c("test failed on function submap");
+                           gstd::reportFailure("gstd::map::submap, test 1");
                             return false;
                         }
                         typedef std::map<double, int>::iterator Iterator;
                         for(Iterator i=res.begin();i!=res.end();i++)
                             if(input[i->first] != i->second)
                             {
-                                gstd::Printer::c("test failed on function submap");
+                                gstd::reportFailure("gstd::map::submap, test 2");
                                 return false;
                             }
                     }
@@ -143,7 +143,7 @@ namespace msii810161816
                     std::map<int, int> res = getCounts(input);
                     if(res != target)
                     {
-                        gstd::Printer::c("test failed on function getCounts");
+                        gstd::reportFailure("gstd::map::getCounts");
                         return false; 
                     }
                 }

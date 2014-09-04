@@ -263,7 +263,7 @@ namespace msii810161816
                     std::vector<double> input3 = {1.000000000000002};
                     if(!mequals(input1, input2) || mequals(input1, input3))
                     {
-                        gstd::Printer::c("test failed on function mequals");
+                        gstd::reportFailure("gstd::Linalg::mequals");
                         return false;
                     }
                 }
@@ -275,7 +275,7 @@ namespace msii810161816
                     std::vector<double> out = mabs(input);
                     if(!mequals(target,out))
                     {
-                        gstd::Printer::c("test failed on function mabs");
+                        gstd::reportFailure("gstd::Linalg::mabs");
                         return false;
                     }
                 }
@@ -287,7 +287,7 @@ namespace msii810161816
                     std::vector<double> neg = mneg(start);
                     if(!mequals(neg,target) || !mequals(mneg(neg),start))
                     {
-                        gstd::Printer::c("test failed on function mneg");
+                        gstd::reportFailure("gstd::Linalg::mneg");
                         return false;
                     }
                 }
@@ -299,7 +299,7 @@ namespace msii810161816
                     std::vector<double> target = {11,-22,33};
                     if(!mequals(madd(start1,start2),target))
                     {
-                        gstd::Printer::c("test failed on function madd");
+                        gstd::reportFailure("gstd::Linalg::madd");
                         return false;
                     }
                 }
@@ -311,7 +311,7 @@ namespace msii810161816
                     std::vector<double> target = {-9,18,-27};
                     if(!mequals(msub(start1,start2),target))
                     {
-                        gstd::Printer::c("test failed on function msub");
+                        gstd::reportFailure("gstd::Linalg::msub");
                         return false;
                     }
                 }
@@ -323,7 +323,7 @@ namespace msii810161816
                     std::vector<double> target = {10,11};
                     if(!mequals(mmult(2,2,1,start1,start2),target))
                     {
-                        gstd::Printer::c("test failed on function mmult");
+                        gstd::reportFailure("gstd::Linalg::mmult");
                         return false;
                     }
 				}
@@ -335,7 +335,7 @@ namespace msii810161816
 					std::vector<double> target = { 10, 40, 90 };
 					if (!mequals(mprod(start1, start2), target))
 					{
-						gstd::Printer::c("test failed on function mprod");
+						gstd::reportFailure("gstd::Linalg::mprod");
 						return false;
 					}
 				}
@@ -346,7 +346,7 @@ namespace msii810161816
 					std::vector<double> target = { -0.5, -1, -1.5 };
 					if (!mequals(mscale(start, -0.5), target))
 					{
-						gstd::Printer::c("test failed on function mscale");
+						gstd::reportFailure("gstd::Linalg::mscale");
 						return false;
 					}
 				}
@@ -357,7 +357,7 @@ namespace msii810161816
                     std::vector<double> target = {3, 7, 11, 15};
                     if(!mequals(msumrows(4,2,start),target))
                     {
-                        gstd::Printer::c("test failed on function msumrows");
+                        gstd::reportFailure("gstd::Linalg::msumrows");
                         return false;
                     }
                 }
@@ -368,7 +368,7 @@ namespace msii810161816
                     std::vector<double> target = {16, 20};
                     if(!mequals(msumcols(4,2,start),target))
                     {
-                        gstd::Printer::c("test failed on function msumcols");
+                        gstd::reportFailure("gstd::Linalg::msumcols");
                         return false;
                     }
                 }
@@ -379,7 +379,7 @@ namespace msii810161816
                     std::vector<double> target = {36};
                     if(!mequals(msumall(start),target))
                     {
-                        gstd::Printer::c("test failed on function msumcols");
+                        gstd::reportFailure("gstd::Linalg::msumall");
                         return false;
                     }
                 }
@@ -391,7 +391,7 @@ namespace msii810161816
                     std::vector<double> target = {140};
                     if(!mequals(mdotprod(start1,start2),target))
                     {
-                        gstd::Printer::c("test failed on function mdotprod");
+                        gstd::reportFailure("gstd::Linalg::mdotprod");
                         return false;
                     }
                 }
@@ -402,7 +402,7 @@ namespace msii810161816
                     std::vector<double> target = {32,33,42,43,52,53};
                     if(!mequals(submatrix(5,4,start,2,1,-1,2),target))
                     {
-                        gstd::Printer::c("test failed on function msumcols");
+                        gstd::reportFailure("gstd::Linalg::submatrix");
                         return false;
                     }
                 }
@@ -414,7 +414,7 @@ namespace msii810161816
                     std::tuple<int, int, std::vector<double>> res = submatrix(5,4,start,2,2,10,10,true);
                     if(res != target)
                     {
-                        gstd::Printer::c("test failed on function msumcols");
+                        gstd::reportFailure("gstd::Linalg::submatrix (overload)");
                         return false;
                     }
                 }
@@ -426,7 +426,7 @@ namespace msii810161816
                     std::vector<double> target = {1,5,2,6,3,7,4,8};
                     if(mcoljoin({input1, input2}) != target)
                     { 
-                        gstd::Printer::c("test failed on function msumcols");
+                        gstd::reportFailure("gstd::Linalg::mcoljoin");
                         return false;
                     }
 				}
@@ -438,7 +438,7 @@ namespace msii810161816
 					double out = minftynorm(input);
 					if (!gstd::Double::equals(target, out))
 					{
-						gstd::Printer::c("test failed on function minftynorm");
+						gstd::reportFailure("gstd::Linalg::minftynorm");
 						return false;
 					}
 				}
@@ -449,7 +449,7 @@ namespace msii810161816
 					std::vector<double> target = { 1, 4, 7, 10, 2, 5, 8, 11, 3, 6, 9, 12 };
 					if (transpose(4, 3, input) != target)
 					{
-						gstd::Printer::c("test failed on function transpose");
+						gstd::reportFailure("gstd::Linalg::transpose");
 						return false;
 					}
 				}
@@ -475,7 +475,7 @@ namespace msii810161816
 					std::vector<double> out = cholesky(input);
 					if (!mequals(out, target, 1e-10, false))
 					{
-						gstd::Printer::c("test failed on function cholesky");
+						gstd::reportFailure("gstd::Linalg::cholesky");
 						return false;
 					}
 				}

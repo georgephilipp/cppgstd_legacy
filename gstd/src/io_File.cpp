@@ -84,21 +84,21 @@ namespace msii810161816
 					std::string target = "/bla/bla/bling";
 					if (joinpaths(start1, start2) != target)
 					{
-						gstd::Printer::c("Test failed on function joinpaths");
+						gstd::reportFailure("gstd::file::joinpaths, test 1");
 						return false;
 					}
 					start1 = "/bla/bla/";
 					target = "/bla/bla/bling";
 					if (joinpaths(start1, start2) != target)
 					{
-						gstd::Printer::c("Test failed on function joinpaths");
+						gstd::reportFailure("gstd::file::joinpaths, test 2");
 						return false;
 					}
 					start1 = "/bla/bla\\";
 					target = "/bla/bla\\bling";
 					if (joinpaths(start1, start2) != target)
 					{
-						gstd::Printer::c("Test failed on function joinpaths");
+						gstd::reportFailure("gstd::file::joinpaths, test 3");
 						return false;
 					}
 					start2 = "/bling";
@@ -106,7 +106,7 @@ namespace msii810161816
 					{
 						gstd::Printer::c("Expecting error message ...");
 						joinpaths(start1, start2);
-						gstd::Printer::c("Test failed on function joinpaths");
+						gstd::reportFailure("gstd::file::joinpaths, test 4");
 						return false;
 					}
 					catch (std::exception e) {}
@@ -115,7 +115,7 @@ namespace msii810161816
 					{
 						gstd::Printer::c("Expecting error message ...");
 						joinpaths(start1, start2);
-						gstd::Printer::c("Test failed on function joinpaths");
+						gstd::reportFailure("gstd::file::joinpaths, test 5");
 						return false;
 					}
 					catch (std::exception e) {}
@@ -128,7 +128,7 @@ namespace msii810161816
 					{
 						gstd::Printer::c("Expecting error message ...");
 						remove({ testFileName }, true, false);
-						gstd::Printer::c("Test failed on test 1 of function remove");
+						gstd::reportFailure("gstd::file::remove, test 1");
 						return false;
 					}
 					catch (std::exception e) {}
@@ -138,7 +138,7 @@ namespace msii810161816
 					}
 					catch (std::exception e)
 					{
-						gstd::Printer::c("Test failed on test 2 of function remove");
+						gstd::reportFailure("gstd::file::remove, test 2");
 						return false;
 					}
 					gstd::Writer::w(testFileName, "bling", false, std::ios::trunc);
@@ -149,7 +149,7 @@ namespace msii810161816
 					}
 					catch (std::exception e)
 					{
-						gstd::Printer::c("Test failed on test 3 of function remove");
+						gstd::reportFailure("gstd::file::remove, test 3");
 						return false;
 					}
 					gstd::Writer::w(testFileName, "bling", false, std::ios::trunc);
@@ -165,7 +165,7 @@ namespace msii810161816
 					}
 					catch (std::exception e)
 					{
-						gstd::Printer::c("Test failed on test 4 of function remove");
+						gstd::reportFailure("gstd::file::remove, test 4");
 						return false;
 					}
 				}

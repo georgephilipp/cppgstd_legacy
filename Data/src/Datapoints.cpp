@@ -33,7 +33,7 @@ namespace msii810161816
                     DpDoubles inverse = DpConverter<DpInts,DpDoubles>::get(output);
                     if(input.content != inverse.content)
                     {
-                        gstd::Printer::c("Test failed on function DpConverter");
+                        gstd::reportFailure("data::datapoints::DpConverter");
                         return false;
                     }
                     

@@ -52,7 +52,7 @@ namespace msii810161816
                 {
                     if(gstd::TypeNameGetter<std::map<std::vector<double>,std::map<bool,int>>>::get().toString() != "std::map<std::vector<double>,std::map<bool,int>>")
                     {
-                        gstd::Printer::c("TypeNameGetter or TypeName failed");
+                        gstd::reportFailure("gstd::TypeName or gstd::TypeNameGetter failed");
                         return false;
                     }
                 }

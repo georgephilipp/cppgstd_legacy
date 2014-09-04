@@ -32,7 +32,7 @@ namespace msii810161816
 					DpRegression recon = data::DpConverter<data::DpString, DpRegression>::get(data::DpConverter<DpRegression, data::DpString>::get(point));
 					if (recon.input != point.input || recon.output != point.output)
 					{
-						gstd::Printer::c("Failed conversion of DpRegression");
+						gstd::reportFailure("Failed on conversion of ml::datapoints::DpRegression");
 						return false;
 					}
 				}
@@ -46,7 +46,7 @@ namespace msii810161816
 					DpMTRegression recon = data::DpConverter<data::DpString, DpMTRegression>::get(base);
 					if (recon.input != point.input || recon.output != point.output)
 					{
-						gstd::Printer::c("Failed conversion of DpMTRegression");
+						gstd::reportFailure("Failed on conversion of ml::datapoints::DpMTRegression");
 						return false;
 					}
 				}

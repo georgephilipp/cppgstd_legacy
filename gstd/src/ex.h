@@ -20,6 +20,7 @@ namespace msii810161816
         void MSII810161816_GSTD_API check(bool condition, std::string message);
 		void MSII810161816_GSTD_API checkMany(std::vector<bool> conditions, std::string message);
 		void MSII810161816_GSTD_API checkNone(std::vector<bool> conditions, std::string message);
+	void MSII810161816_GSTD_API reportFailure(std::string message);
         std::string MSII810161816_GSTD_API numtovar(int num, int varsize);
         
         bool MSII810161816_GSTD_API test();

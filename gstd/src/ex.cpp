@@ -41,6 +41,11 @@ namespace msii810161816
 				gstd::check(!conditions[i], message);
 		}
 
+	void reportFailure(std::string message)
+	{
+		std::cout << "Function test failed : " << message << std::endl;
+	}
+
         std::map<std::string,std::string> makenumtovarexceptionmap()
         {
             std::map<std::string,std::string> exceptions;

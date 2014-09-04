@@ -28,14 +28,14 @@ namespace msii810161816
                     std::vector<int> target = {1,2,3,4,5,6,7,8};
                     if(create(input) != target)
                     {
-                        gstd::Printer::c("Test failed on function create");
+                        gstd::reportFailure("gstd::matrix::create, test 1");
                         return false;
                     }
                     try
                     {
                         gstd::Printer::c("Expecting Error message ...");
                         create(input2);
-                        gstd::Printer::c("Test failed on function create");
+                        gstd::reportFailure("gstd::matrix::create, test 2");
                         return false;
                     }
                     catch(std::exception e) {}                    
@@ -47,14 +47,14 @@ namespace msii810161816
 					std::vector<int> input = { 1, 2, 3, 4, 5, 6, 7, 8 };
 					if (to2d(2, 4, input) != target)
 					{
-						gstd::Printer::c("Test failed on function create");
+						gstd::reportFailure("gstd::matrix::to2d, test 1");
 						return false;
 					}
 					try
 					{
 						gstd::Printer::c("Expecting Error message ...");
 						to2d(3, 3, input);
-						gstd::Printer::c("Test failed on function create");
+						gstd::reportFailure("gstd::matrix::to2d, test 2");
 						return false;
 					}
 					catch (std::exception e) {}
@@ -67,7 +67,7 @@ namespace msii810161816
 					std::vector<std::vector<int> > input3 = { { 1, 2, 3 }, { 1, 2, 3 }, { 3, 5, 7 } };
 					if (!isMatrix(input1) || isMatrix(input2) || !isMatrix(input3))
 					{
-						gstd::Printer::c("Test failed on function isMatrix");
+						gstd::reportFailure("gstd::matrix::isMatrix");
 						return false;
 					}
 				}

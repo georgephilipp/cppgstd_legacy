@@ -72,7 +72,7 @@ namespace msii810161816
                     double x = -3.0;
                     if(abs(x) != 3.0)
                     {
-                        gstd::Printer::c("Function abs failed");
+                        gstd::reportFailure("gstd::Double::abs");
                         return false;
                     }
                 }
@@ -92,7 +92,7 @@ namespace msii810161816
                             ||!equals(w,0)
                             )
                     {
-                        gstd::Printer::c("Function equals failed");
+                        gstd::reportFailure("gstd::Double::equals");
                         return false;
                     }                  
                 }
@@ -106,7 +106,7 @@ namespace msii810161816
                         double clipped = clipPrecision(x);
                         if(abs(clipped - x) > 1e-15 || x == clipped || clipPrecision(1e-16) != 0)
                         {
-                            gstd::Printer::c("test failed on function clipPrecision");
+                            gstd::reportFailure("gstd::Double::clipPrecision");
                             return false;
                         }
                     }
@@ -151,12 +151,12 @@ namespace msii810161816
 				{
 					if (create(3, "down") != 3 || create(3.9, "down") != 3 || create(3, "up") != 3 || create(2.1, "up") != 3 || create(2.9, "round") != 3 || create(3.1, "round") != 3)
 					{
-						gstd::Printer::c("Failed on function 'create'");
+						gstd::reportFailure("gstd::Int::create, test 1");
 						return false;
 					}
 					if (create(-3, "down") != -3 || create(-2.1, "down") != -3 || create(-3, "up") != -3 || create(-3.9, "up") != -3 || create(-2.9, "round") != -3 || create(-3.1, "round") != -3)
 					{
-						gstd::Printer::c("Failed on function 'create'");
+						gstd::reportFailure("gstd::Int::create, test 2");
 						return false;
 					}
 				}
@@ -167,7 +167,7 @@ namespace msii810161816
 					std::pair<int, double> res2 = splitReal(3);
 					if (res1.first != -3 || !Double::equals(res1.second, 0.9) || res2.first != 3 || !Double::equals(res2.second, 0) || res2.second < 0)
 					{
-						gstd::Printer::c("Failed on function 'splitReal'");
+						gstd::reportFailure("gstd::Int::splitReal");
 						return false;
 					}
 				}

@@ -98,7 +98,7 @@ namespace msii810161816
                     std::vector<double> res = create(map);
                     if((int)res.size() != 4 || res[1] != 1.1 || res[3] != 2.2 )
                     {
-                        gstd::Printer::c("Test failed on function create");
+                        gstd::reportFailure("gstd::vector::create");
                         return false;
                     }
                 }
@@ -110,7 +110,7 @@ namespace msii810161816
                     std::vector<int> target = {1,3,5};
                     if(getmany(vals, keys) != target)
                     {
-                        gstd::Printer::c("Test failed on function getmany");
+                        gstd::reportFailure("gstd::vector::getmany");
                         return false;
                     }
                 }
@@ -123,7 +123,7 @@ namespace msii810161816
                     std::vector<int> invertedtwice = invertToVector(inverted);
                     if( inverted != inverse || invertedtwice != start)
                     {
-                        gstd::Printer::c("Test failed on function invertToVector");
+                        gstd::reportFailure("gstd::vector::invertToVector");
                         return false;
                     }                                        
                 }
@@ -134,7 +134,7 @@ namespace msii810161816
                     empty(start);
                     if(start.size() != 0)
                     {
-                        gstd::Printer::c("Test failed on function empty");
+                        gstd::reportFailure("gstd::vector::empty");
                         return false;
                     } 
                 }
@@ -147,7 +147,7 @@ namespace msii810161816
                     std::vector<int> target = {1,2,3,4,6,7};
                     if(res != target)
                     {
-                        gstd::Printer::c("Test failed on function unique");
+                        gstd::reportFailure("gstd::vector::unique");
                         return false;
                     }  
                 }
@@ -169,7 +169,7 @@ namespace msii810161816
                     std::vector<std::pair<int, int>> res = insertIndeces(start);
                     if(res != target)
                     {
-                        gstd::Printer::c("Test failed on function insertIndeces");
+                        gstd::reportFailure("gstd::vector::insertIndeces");
                         return false;
                     } 
                 }
@@ -182,7 +182,7 @@ namespace msii810161816
                     std::pair<std::vector<int>,std::vector<int>> res = sort(start, true);
                     if(res.first != targetinds || res.second != targetvals)
                     {
-                        gstd::Printer::c("Test failed on function sort");
+                        gstd::reportFailure("gstd::vector::sort");
                         return false;
                     }    
                 }
@@ -193,7 +193,7 @@ namespace msii810161816
                     std::pair<int, int> _max = vmax(start);
                     if(_max.first != 3 || _max.second != 7)
                     {
-                        gstd::Printer::c("Test failed on function max");
+                        gstd::reportFailure("gstd::vector::max");
                         return false;
                     }  
                 }
@@ -204,7 +204,7 @@ namespace msii810161816
                     std::pair<int, int> _min = vmin(start);
                     if(_min.first != 4 || _min.second != 1)
                     {
-                        gstd::Printer::c("Test failed on function min");
+                        gstd::reportFailure("gstd::vector::min");
                         return false;
                     }  
                 }
@@ -216,7 +216,7 @@ namespace msii810161816
                     std::vector<int> target2 = {7,1,5,2,3,5};    
                     if(sub(start, 3, 3) != target1 || sub(start, 3, 10, true) != target2)
                     {
-                        gstd::Printer::c("Test failed on function sub");
+                        gstd::reportFailure("gstd::vector::sub");
                         return false;
                     }                        
 				}
@@ -228,7 +228,7 @@ namespace msii810161816
 					std::vector<double> target = { 8, 4.5, 1.5, 4.5, 1.5, 8, 0, 4.5, 8, 4.5 };
 					if (rank(start, false) != target || rank(start2, true) != target)
 					{
-						gstd::Printer::c("Test failed on function rank");
+						gstd::reportFailure("gstd::vector::rank");
 						return false;
 					}
 				}
@@ -242,7 +242,7 @@ namespace msii810161816
 						res[i] = sort(res[i]).second;
 					if (res != target)
 					{
-						gstd::Printer::c("Test failed on function rankIndeces");
+						gstd::reportFailure("gstd::vector::rankIndeces");
 						return false;
 					}
 				}
@@ -254,7 +254,7 @@ namespace msii810161816
 					std::vector<int> target = { 2, 3, 4 };
 					if (apply(addone, start) != target)
 					{
-						gstd::Printer::c("Test failed on function apply");
+						gstd::reportFailure("gstd::vector::apply");
 						return false;
 					}
 				}
@@ -266,7 +266,7 @@ namespace msii810161816
 					std::vector<std::vector<int> > target = { { 6, 7, 8 }, { 9, 10 } };
 					if (apply2d(addfive, start) != target)
 					{
-						gstd::Printer::c("Test failed on function apply2d");
+						gstd::reportFailure("gstd::vector::apply2d");
 						return false;
 					}
 				}
@@ -279,7 +279,7 @@ namespace msii810161816
 					std::vector<std::string> stringTarget = dtos(doubleVec);
 					if (stringVec != stringTarget || doubleVec != doubleTarget)
 					{
-						gstd::Printer::c("Test failed on function stod / dtos");
+						gstd::reportFailure("gstd::vector::stod or gstd::vector::dtos");
 						return false;
 					}
 				}
@@ -290,7 +290,7 @@ namespace msii810161816
 					std::vector<std::vector<double> > target = { { 1.1, 2.2, 3.3 }, { 4, 5, 6 } };
 					if (stod2d(start) != target || dtos2d(target) != start)
 					{
-						gstd::Printer::c("Test failed on function stod / dtos");
+						gstd::reportFailure("gstd::vector::stod2d or gstd::vector::dtos2d");
 						return false;
 					}
 				}
@@ -301,7 +301,7 @@ namespace msii810161816
 					std::vector<double> dVec = { 1, 2, 3 };
 					if (iVec != dtoi(dVec, "round") || dVec != itod(iVec))
 					{
-						gstd::Printer::c("Test failed on function dtoi / itod");
+						gstd::reportFailure("gstd::vector::dtos or gstd::vector::itod");
 						return false;
 					}
 				}

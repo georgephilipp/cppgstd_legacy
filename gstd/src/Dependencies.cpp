@@ -57,7 +57,7 @@ namespace msii810161816
 					}
 					catch(std::exception e)
 					{
-						gstd::Printer::c("Failed on function cpp::getHome");
+						gstd::reportFailure("Failed on function gstd::dependencies::cpp::getHome");
 						return false;
 					}
 				}
@@ -70,7 +70,7 @@ namespace msii810161816
 					}
 					catch (std::exception e)
 					{
-						gstd::Printer::c("Failed on function cpp::getHome");
+						gstd::reportFailure("Failed on function gstd::dependencies::matlab::getObjRoot");
 						return false;
 					}
 				}
