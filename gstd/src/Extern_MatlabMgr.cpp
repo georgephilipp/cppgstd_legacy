@@ -12,6 +12,7 @@
 #include "Linalg.h"
 #include "Matrix.h"
 #include "engine.h"
+#include "Dependencies.h"
 #include <sstream>
 #include <iostream>
 #include <cmath>
@@ -24,8 +25,6 @@ namespace msii810161816
 		{
 			Engine* engine;
 		};
-
-		const std::string MatlabSession::objRoots[3] = { "/usr0/home/gschoenh/Dropbox/Code_obj/Libraries/Matlab/", "C:/Users/gschoenh/Dropbox/Code_obj/Libraries/Matlab/", "/home/gschoenh/Dropbox/Code_obj/Libraries/Matlab/" };
 
         MatlabSession::MatlabSession() 
         {
@@ -50,7 +49,18 @@ namespace msii810161816
 			gstd::check(eng != 0, "could not open matlab engine");
 			engine->engine = eng;
 #else            
-			gstd::check((engine->engine = engOpen("/opt/matlab/8.1/bin/matlab")) != 0, "could not open matlab engine");
+			bool beenOpened = false;
+			for(int i=0;i<(int)dependencies::matlab::startCommands.size();i++)
+			{
+				Engine* eng = engOpen(dependencies::matlab::startCommands[i].c_str());
+				if(eng != 0)
+				{
+					engine->engine = eng;
+					beenOpened = true;
+					break;
+				}
+			}
+			gstd::check(beenOpened, "could not open matlab engine");
 #endif
 			thisIsOpen = true;
         }

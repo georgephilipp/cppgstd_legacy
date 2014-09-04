@@ -4,6 +4,7 @@
 #include "gstd/src/Vector.h"
 #include "gstd/src/MatlabMgr.h"
 #include "gstd/src/Linalg.h"
+#include "gstd/src/Dependencies.h"
 
 namespace msii810161816
 {
@@ -44,12 +45,8 @@ namespace msii810161816
 			int numLambdas = lambdas.size();
 			mgr.create(1, numLambdas, lambdas, "Lambda");
 
-			//add paths
-			int numObjRoots = sizeof(gstd::MatlabSession::objRoots) / sizeof(gstd::MatlabSession::objRoots[0]);
-			for (int i = 0; i < numObjRoots; i++)
-			{
-				mgr.exec("addpath(genpath('" + gstd::MatlabSession::objRoots[i] + "SLEP'));");
-			}
+			//add path
+			mgr.exec("addpath(genpath('" + gstd::dependencies::matlab::getObjRoot() + "SLEP'));");
 
 			//set options
 			mgr.exec("opts = [];");

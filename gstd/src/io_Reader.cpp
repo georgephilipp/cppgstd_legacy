@@ -13,6 +13,7 @@
 #include "Parser.h"
 #include "Timer.h"
 #include "File.h"
+#include "Dependencies.h"
 
 namespace msii810161816
 {   
@@ -206,12 +207,7 @@ namespace msii810161816
         }
 		std::string Reader::getTestFileName()
 		{
-			gstd::Printer::c("Note!!! Reader::getTestFileName() is using an absolute filepath which will only work on my computer, not yours!");
-#ifdef _WIN32
-			return "C:/Users/gschoenh/Dropbox/Code/cpp/libs/gstd/src/ReaderTestFile.txt";
-#else
-			return "/usr0/home/gschoenh/Dropbox/Code/cpp/libs/gstd/src/ReaderTestFile.txt";
-#endif
+			return dependencies::cpp::getHome() + "libs/gstd/src/ReaderTestFile.txt";
 		}
 
         void Reader::setInputs()

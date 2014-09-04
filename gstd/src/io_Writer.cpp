@@ -6,6 +6,7 @@
 #include "Reader.h"
 #include "Timer.h"
 #include "File.h"
+#include "Dependencies.h"
 
 namespace msii810161816
 {
@@ -81,12 +82,7 @@ namespace msii810161816
 		}
 		std::string Writer::getTestFileName()
 		{
-			gstd::Printer::c("Note!!! Writer::getTestFileName() is using an absolute filepath which will only work on my computer, not yours!");
-#ifdef _WIN32
-			return "C:/Users/gschoenh/Dropbox/Code/cpp/libs/gstd/src/WriterTestFile.txt";
-#else
-			return "/usr0/home/gschoenh/Dropbox/Code/cpp/libs/gstd/src/WriterTestFile.txt";
-#endif
+			return dependencies::cpp::getHome() + "libs/gstd/src/WriterTestFile.txt";
 		}
 		void Writer::setInputs()
 		{

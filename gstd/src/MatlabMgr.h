@@ -40,8 +40,6 @@ namespace msii810161816
 
 			bool isOpen();
 
-			static const std::string objRoots[3];
-
 		private:
 			static MatlabSession inst; //default target for MatlabMgr
 			bool thisIsOpen;

@@ -8,6 +8,7 @@
 #include "Reader.h"
 #include "Linalg.h"
 #include "File.h"
+#include "Dependencies.h"
 
 namespace msii810161816
 {
@@ -237,18 +238,11 @@ namespace msii810161816
 		}
 		void TerminalMgr::setInputs()
 		{
-			gstd::Printer::c("!!!NOTE!!! Paths used to set inputs will only work on my computer!");
-			externalPath = "../../../../Code_obj/Libraries/Matlab/SLEP_wrappers/";
-			internalPath = "../../../../Code_obj/Libraries/Matlab/SLEP_wrappers/";
-#ifdef _WIN32
-			externalPath = "../" + externalPath;
-			internalPath = "../" + internalPath;
-#endif
-#ifdef _WIN32
-			command = "\"C:/Program Files/MATLAB/R2013a/bin/matlab.exe\" -nojvm -nodisplay -nosplash -r \"Lasso\"";
-#else
+			externalPath = dependencies::matlab::getObjRoot() + "SLEP_wrappers/";
+			internalPath = externalPath;
+
 			command = "matlab -nojvm -nodisplay -nosplash -r \"Lasso; exit;\"";
-#endif
+
 			delimiter = ',';
 			inHeaderFiles.push_back({ "8,7,6,5,4,3,2,1,0", "1,2,3,4" });
 			inDataFiles.push_back({ { 0, 1, 1, 1 }, { 1, 1, 0, 1 }, { 0, 0, 0, 1 }, { 1, 0, 0, 1 }, { 1, 0, 0, 1 }, { 0, 1, 1, 1 }, { 0, 1, 0, 1 }, { 0, 0, 1, 1 }, { 1, 0, 1, 1 } });

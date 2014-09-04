@@ -2,33 +2,21 @@
 
 #include "SlepBase.h"
 #include "gstd/src/Vector.h"
+#include "gstd/src/Dependencies.h"
 
 namespace msii810161816
 {
 	namespace ml
 	{      
-#ifdef _WIN32
-			const std::string SlepBase::defaultCommandBase = "matlab -nojvm -nodisplay -nosplash -r ";
-#else
-			const std::string SlepBase::defaultCommandBase = "/opt/matlab/8.1/bin/matlab -nojvm -nodisplay -nosplash -r ";
-#endif             
-            
+		const std::string SlepBase::defaultCommandBase = "matlab -nojvm -nodisplay -nosplash -r ";
+
 		SlepBase::SlepBase()
 		{
-			mgr.externalPath = "../../../../Code_obj/Libraries/Matlab/SLEP_wrappers/";
-			mgr.internalPath = "../../../../Code_obj/Libraries/Matlab/SLEP_wrappers/";
-#ifdef _WIN32
-			mgr.externalPath = "../" + mgr.externalPath;
-			mgr.internalPath = "../" + mgr.internalPath;
-#endif
-#ifdef _WIN32
+			mgr.externalPath = gstd::dependencies::matlab::getObjRoot() + "SLEP_wrappers/";
+			mgr.internalPath = mgr.externalPath;
 			mgr.command = SlepBase::defaultCommandBase;
-#else
-			mgr.command = SlepBase::defaultCommandBase;
-#endif
 			mgr.delimiter = ',';
-                        
-                        procname = "";
+            procname = "";
 		}
 		void SlepBase::prepStd(bool withSweep)
 		{

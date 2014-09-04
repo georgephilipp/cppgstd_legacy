@@ -13,6 +13,7 @@
 #include "DpDoublesGenerators.h"
 #include "RegressionGenerators.h"
 #include "RegressionNormalizer.h"
+#include "gstd/src/Dependencies.h"
 
 namespace msii810161816
 {
@@ -54,12 +55,8 @@ namespace msii810161816
 
 			prepStd(withSweep);
 
-                        //add additional paths
-			int numObjRoots = sizeof(gstd::MatlabSession::objRoots) / sizeof(gstd::MatlabSession::objRoots[0]);
-			for (int i = 0; i < numObjRoots; i++)
-			{
-				mgr.exec("addpath(genpath('" + gstd::MatlabSession::objRoots[i] + "SIOL'));");
-			}
+            //add additional paths
+			mgr.exec("addpath(genpath('" + gstd::dependencies::matlab::getObjRoot() + "SIOL'));");
                         
 			//set data
 			std::vector<double> inMatrix;
