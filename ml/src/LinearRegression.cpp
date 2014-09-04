@@ -105,7 +105,7 @@ namespace msii810161816
 				mgr.create(maxDataPoint, 1, outMatrix, "Y");
 
 				mgr.exec("res = LinearModel.fit(X, Y, 'intercept', false);");
-				mgr.exec("res = double(res.Coefficients);");
+				mgr.exec("res = table2array(res.Coefficients);");
 
 				int ressize1, ressize2;
 				std::vector<double> res;

@@ -130,8 +130,11 @@ namespace msii810161816
         
         MatlabMgr::~MatlabMgr() 
         {
-            if(hasOpenedInst && MatlabSession::inst.isOpen())
-                MatlabSession::inst.close();
+			if (hasOpenedInst)
+			{
+				gstd::check(MatlabSession::inst.isOpen(), "matlabmgr owns a closed inst. this should never happen");
+				MatlabSession::inst.close();
+			}
         }
 
         //run
@@ -278,6 +281,7 @@ namespace msii810161816
         
         void MatlabMgr::instClose()
         {
+			gstd::check(hasOpenedInst, "cannot close inst if it is not owned by this mgr");
             MatlabSession::inst.close();
             hasOpenedInst = false;
         }

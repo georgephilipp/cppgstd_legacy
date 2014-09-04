@@ -26,6 +26,8 @@ namespace msii810161816
             //static int defaultTailedMode;
             static void randomize();
             static void seed(int input);
+			static int getRandMax();
+			static int get();
             static int i(int max);
             static double d(int mode);
             static std::vector<int> perm(int total, int top);

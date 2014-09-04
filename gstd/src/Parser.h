@@ -79,7 +79,7 @@ namespace msii810161816
                 gstd::trial<type> res;          
                                 
                 //return fail if end of stream is reached
-                if(p->content.peek() == -1)
+                if(p->content.eof())
                 {
                     res.success = false;
                     return res;
@@ -104,7 +104,7 @@ namespace msii810161816
                 std::vector<type> res(0);
                                 
                 //return fail if end of stream is reached
-                while(p->content.peek() != -1)
+                while(!p->content.eof())
                 {
                     //this is the fastest I can think of for unspecified type            
                     std::string out;
@@ -128,7 +128,7 @@ namespace msii810161816
 				gstd::trial<std::string> res;
 
 				//return fail if end of stream is reached
-				if (p->content.peek() == -1)
+				if (p->content.eof())
 				{
 					res.success = false;
 					return res;
@@ -145,7 +145,7 @@ namespace msii810161816
 				std::vector<std::string> res(0);
 
 				//return fail if end of stream is reached
-				while (p->content.peek() != -1)
+				while (!p->content.eof())
 				{
 					//this is the fastest I can think of for unspecified type            
 					std::string out;
@@ -164,7 +164,7 @@ namespace msii810161816
                 gstd::trial<double> res;   
 
                 //return fail if end of stream is reached
-                if(p->content.peek() == -1)
+                if(p->content.eof())
                 {
                     res.success = false;
                     return res;
@@ -182,7 +182,7 @@ namespace msii810161816
             {
                 std::vector<double> res(0);
 
-                while(p->content.peek() != -1)
+                while(!p->content.eof())
                 {           
                     //this is slightly slower than the below
                     /*double out;

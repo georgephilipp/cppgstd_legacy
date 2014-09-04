@@ -58,19 +58,38 @@ namespace msii810161816
             srand((unsigned)input);            
         }
         
+		int Rand::getRandMax()
+		{
+#ifdef __APPLE__
+			return RAND_MAX - 1;
+#else
+			return RAND_MAX;
+#endif
+		}
+
+		int Rand::get()
+		{
+#ifdef __APPLE__
+			return rand() - 1;
+#else
+			return rand();
+#endif
+		}
+
         int Rand::i(int max)
         {
-			if (max > RAND_MAX)
+			int randMax = getRandMax();
+			if (max > randMax)
 			{
-				int factor = i(max / RAND_MAX + 1);
-				int remainder = i(RAND_MAX);
-				if (factor == max / RAND_MAX && remainder >= max % RAND_MAX)
+				int factor = i(max / randMax + 1);
+				int remainder = i(randMax);
+				if (factor == max / randMax && remainder >= max % randMax)
 					return i(max);
 				else
-					return factor * RAND_MAX + remainder;
+					return factor * randMax + remainder;
 			}
-            int ratio = RAND_MAX / max;
-            int draw = rand();
+			int ratio = randMax / max;
+            int draw = get();
             if(draw / max == ratio)
                 return i(max);
             return draw % max;            
@@ -78,7 +97,8 @@ namespace msii810161816
         
         double Rand::d(int mode)
         {
-            //::rand() returns integers between AND INCLUDING 0 and RAND_MAX
+			int randMax = getRandMax();
+            //::rand() returns integers between AND INCLUDING 0 and RAND_MAX EXCEPT on a mac, where it returns between AND INCLUDING 1 and RAND_MAX
             
             //mode 0: 32-bit equispaced between and including 0 and 1 (fastest)
             //mode 1: 64-bit equispaced between and including 0 and 1 (fastest for 64 bit)
@@ -86,20 +106,20 @@ namespace msii810161816
             //mode 3: 64-bit equispaced between and excluding 0/1 and symmetric (clipped) tail (should be the default for most calls!)
             //mode 4: 64-bit equispaced between and excluding 0/1 with high-accuracy / asymmetric tail (should be the default for normal random vars!)
             
-			if (RAND_MAX > 100000000)
+			if (randMax > 100000000)
 			{
 				if (mode == 0) // fastest
 				{
-					return (double)rand() / RAND_MAX;
+					return (double)get() / randMax;
 				}
 				else if (mode == 1) //fastest for double precision
 				{
-					return ((0.5 + (double)rand()) / ((double)RAND_MAX + 1) + (double)rand()) / ((double)RAND_MAX + 1);
+					return ((0.5 + (double)get()) / ((double)randMax + 1) + (double)get()) / ((double)randMax + 1);
 				}
 				else if (mode == 2) // cannot equal 0 or 1 (single precision)
 				{
 					int lower = i(2);
-					double base = ((double)rand() + 0.5) / 2 / ((double)RAND_MAX + 1);
+					double base = ((double)get() + 0.5) / 2 / ((double)randMax + 1);
 					base = gstd::Double::clipPrecision(base);
 					if (lower == 0)
 						return base;
@@ -108,7 +128,7 @@ namespace msii810161816
 				}
 				else if (mode == 3)
 				{
-					if (RAND_MAX > 100000000)
+					if (randMax > 100000000)
 					{
 						int lower = i(2);
 						int draw1 = i(25000000);
@@ -124,7 +144,7 @@ namespace msii810161816
 				}
 				else if (mode == 4)
 				{
-					if (RAND_MAX > 1000000000)
+					if (randMax > 1000000000)
 					{
 						double res = 0.5;
 						for (int j = 0; j < 10; j++)
@@ -140,20 +160,20 @@ namespace msii810161816
 					return 0;
 				}
 			}
-			else if (RAND_MAX > 10000)
+			else if (randMax > 10000)
 			{
 				if (mode == 0) // fastest
 				{
-					return (double)rand() / RAND_MAX;
+					return (double)get() / randMax;
 				}
 				else if (mode == 1) //fastest for double precision
 				{
-					return ((((0.5 + (double)rand()) / ((double)RAND_MAX + 1) + (double)rand()) / ((double)RAND_MAX + 1) + (double)rand()) / ((double)RAND_MAX + 1) + (double)rand()) / ((double)RAND_MAX + 1);
+					return ((((0.5 + (double)get()) / ((double)randMax + 1) + (double)get()) / ((double)randMax + 1) + (double)get()) / ((double)randMax + 1) + (double)get()) / ((double)randMax + 1);
 				}
 				else if (mode == 2) // cannot equal 0 or 1 (single precision)
 				{
 					int lower = i(2);
-					double base = ((double)rand() + 0.5) / 2 / ((double)RAND_MAX + 1);
+					double base = ((double)get() + 0.5) / 2 / ((double)randMax + 1);
 					base = gstd::Double::clipPrecision(base);
 					if (lower == 0)
 						return base;

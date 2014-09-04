@@ -50,7 +50,9 @@ namespace msii810161816
             if( n1 != 1.0 || n2 != 2 || n34 != std::vector<double>({3.0,4.0}) || n0.size() > 0 
 				|| Parser::vector<int>("1,2", ',') != std::vector<int>({ 1, 2 }) 
 				|| Parser::vector<double>("1.1,2.2", ',') != std::vector<double>({ 1.1, 2.2 }) 
-				|| Parser::vector<std::string>("1,2,shamrock shake", ',') != std::vector<std::string>({ "1", "2", "shamrock shake" }))
+				|| Parser::vector<std::string>("1,2,shamrock shake", ',') != std::vector<std::string>({ "1", "2", "shamrock shake" })
+				|| Parser::vector<std::string>("1,2,shamrock shake,", ',') != std::vector<std::string>({ "1", "2", "shamrock shake", "" })
+				)
             {
                 p.reportFailure();
                 return false;

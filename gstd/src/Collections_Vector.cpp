@@ -237,7 +237,10 @@ namespace msii810161816
 				{
 					std::vector<double> start = { 1.1, 2.2, 3.3, 2.2, 3.3, 1.1, 4.4, 2.2, 1.1, 2.2 };
 					std::vector<std::vector<int> > target = { { 6 }, { 2, 4 }, { 1, 3, 7, 9 }, { 0, 5, 8 } };
-					if (rankIndeces(start) != target)
+					std::vector<std::vector<int> > res = rankIndeces(start);
+					for(int i=0;i<(int)res.size();i++)
+						res[i] = sort(res[i]).second;
+					if (res != target)
 					{
 						gstd::Printer::c("Test failed on function rankIndeces");
 						return false;
