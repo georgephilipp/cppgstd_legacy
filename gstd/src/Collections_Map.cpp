@@ -128,25 +128,51 @@ namespace msii810161816
                                 return false;
                             }
                     }
-                }
-                
-                //getCounts
-                {
-                    std::vector<int> input = {1,2,3,4,5,6,1,2,3,4,5,6,1,2,3};
-                    std::map<int,int> target;
-                    target[1] = 3;
-                    target[2] = 3;
-                    target[3] = 3;
-                    target[4] = 2;
-                    target[5] = 2;
-                    target[6] = 2;
-                    std::map<int, int> res = getCounts(input);
-                    if(res != target)
-                    {
-                        gstd::reportFailure("gstd::map::getCounts");
-                        return false; 
-                    }
-                }
+				}
+
+				//getCounts
+				{
+					std::vector<int> input = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3 };
+					std::map<int, int> target;
+					target[1] = 3;
+					target[2] = 3;
+					target[3] = 3;
+					target[4] = 2;
+					target[5] = 2;
+					target[6] = 2;
+					std::map<int, int> res = getCounts(input);
+					if (res != target)
+					{
+						gstd::reportFailure("gstd::map::getCounts");
+						return false;
+					}
+				}
+
+				//tick
+				{
+					std::map<std::string, int> input, target;
+					target["a"] = 1;
+					input = tick<std::string>(input, "a");
+					if (input != target)
+					{
+						gstd::reportFailure("gstd::map::tick");
+						return false;
+					}
+					target["a"] = 2;
+					input = tick<std::string>(input, "a");
+					if (input != target)
+					{
+						gstd::reportFailure("gstd::map::tick");
+						return false;
+					}
+					target["b"] = 1;
+					input = tick<std::string>(input, "b");
+					if (input != target)
+					{
+						gstd::reportFailure("gstd::map::tick");
+						return false;
+					}
+				}
                 
                 return true;            
             }           

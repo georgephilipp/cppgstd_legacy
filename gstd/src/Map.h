@@ -93,6 +93,15 @@ namespace msii810161816
                     res[input[i]]++;
                 return res;
             }
+
+			template<typename type> std::map<type, int> tick(std::map<type, int> input, type element)
+			{
+				if (input.count(element) == 1)
+					input[element] = input[element] + 1;
+				else
+					input[element] = 1;
+				return input;
+			}
             
             bool MSII810161816_GSTD_API test();
         }
