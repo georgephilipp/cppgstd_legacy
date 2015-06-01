@@ -34,16 +34,6 @@ namespace msii810161816
             void set(std::string in); //this or the above
             char delimiter;
             
-            template<typename type> gstd::trial<type> get()
-            {
-                type gotten;
-                content >> gotten;
-                if(content.fail())
-                    gstd::error("conversion failed");
-                
-                return gotten;
-            }
-            
             template<typename type> gstd::trial<type> getnext()
             {
                 return ParserHelper<type>::getnext(this);
@@ -198,6 +188,48 @@ namespace msii810161816
             }  
         };
         
+		template<>
+		struct ParserHelper<int>
+		{
+			static gstd::trial<int> getnext(Parser* p)
+			{
+				gstd::trial<int> res;
+
+				//return fail if end of stream is reached
+				if (p->content.eof())
+				{
+					res.success = false;
+					return res;
+				}
+
+				//this is the fastest I can think of for unspecified type            
+				std::string out;
+				std::getline(p->content, out, p->delimiter);
+				res.result = std::stoi(out);
+				res.success = true;
+				return res;
+			}
+
+			static std::vector<int> getall(Parser* p)
+			{
+				std::vector<int> res(0);
+
+				while (!p->content.eof())
+				{
+					//this is slightly slower than the below
+					/*double out;
+					content << out;
+					res.push_back(out);*/
+
+					//this is 2*10^7 per conversion
+					std::string out;
+					std::getline(p->content, out, p->delimiter);
+					res.push_back(std::stoi(out));
+				}
+				return res;
+			}
+		};
+
         template<>
         struct TypeNameGetter<Parser>
         {
