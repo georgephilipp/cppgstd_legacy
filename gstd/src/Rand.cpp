@@ -310,12 +310,18 @@ namespace msii810161816
 					reportFailure("top exceeded on scale iteration " + gstd::Printer::p(j) + " scale " + gstd::Printer::p(scales[j]));
 					return false;
 				}
-				if (abs(sum - sumtarget) / sumtarget > 0.1)
+                                double abssumtargetdiff = sum - sumtarget;
+                                if(abssumtargetdiff < 0)
+                                    abssumtargetdiff = -abssumtargetdiff;
+				if (abssumtargetdiff / sumtarget > 0.1)
 				{
 					reportFailure("sum not within bound on scale iteration " + gstd::Printer::p(j) + " scale " + gstd::Printer::p(scales[j]));
 					return false;
 				}
-				if (abs(sumsquares - sumsquaretarget) / sumsquaretarget > 0.1)
+                                double abssumsquaretargetdiff = sumsquares - sumsquaretarget;
+                                if(abssumsquaretargetdiff < 0)
+                                    abssumsquaretargetdiff = -abssumsquaretargetdiff;
+				if (abssumsquaretargetdiff / sumsquaretarget > 0.1)
 				{
 					reportFailure("sum not within bound on scale iteration " + gstd::Printer::p(j) + " scale " + gstd::Printer::p(scales[j]));
 					return false;

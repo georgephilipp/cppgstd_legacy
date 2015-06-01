@@ -25,7 +25,12 @@ namespace msii810161816
                 int size = m1.size();
                 std::vector<double> res(size);
                 for(int i=0;i<size;i++)
-                    res[i] = abs(m1[i]);
+                {
+                    if(m1[i] < 0)
+                        res[i] = -m1[i];
+                    else
+                        res[i] = m1[i];
+                }          
                 return res;
             }            
             
@@ -206,8 +211,13 @@ namespace msii810161816
                 double res = 0;
                 int size = m1.size();
                 for(int i=0;i<size;i++)
-                    if(res < abs(m1[i]))
-                        res = abs(m1[i]);
+                {
+                    double absval = m1[i];
+                    if(absval < 0)
+                        absval = -absval;
+                    if(res < absval)
+                        res = absval;
+                }   
                 return res;
             }
             
