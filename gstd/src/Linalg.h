@@ -11,6 +11,7 @@
 #define	LINALG_H
 #include"standard.h"
 #include <tuple>
+#include <math.h>
 
 
 namespace msii810161816
@@ -19,7 +20,7 @@ namespace msii810161816
     {   
         namespace Linalg
         {
-            bool MSII810161816_GSTD_API mequals(std::vector<double> m1, std::vector<double> m2, double margin = 1e-15, bool relative = true); //check whether 2 matrices are equal
+			bool MSII810161816_GSTD_API mequals(std::vector<double> m1, std::vector<double> m2, double margin = 1e-15, bool relative = true); //check whether 2 matrices are equal
             std::vector<double> MSII810161816_GSTD_API mabs(std::vector<double>& m1); //absolute values of entries
             std::vector<double> MSII810161816_GSTD_API mneg(std::vector<double>& m1); //negative of a matrix
             std::vector<double> MSII810161816_GSTD_API madd(std::vector<double>& m1, std::vector<double>& m2); //add 2 matrices
@@ -37,6 +38,32 @@ namespace msii810161816
             double MSII810161816_GSTD_API minftynorm(std::vector<double>& m1);
 			std::vector<double> MSII810161816_GSTD_API transpose(int dim1, int dim2, std::vector<double> m);
 			std::vector<double> MSII810161816_GSTD_API cholesky(std::vector<double>&m1);
+
+			template<typename T> bool equals(std::vector<T> m1, std::vector<T> m2, T margin, bool relative = true) // checks whether double or float matrices are equal
+			{
+				gstd::check(m1.size() == m2.size(), "cannot compare matrices of unequal size for equality");
+				int mSize = (int)m1.size();
+				for (int i = 0; i < mSize; i++)
+				{
+					if (!gstd::Double::equals(m1[i], m2[i], margin, relative))
+						return false;
+				}
+				return true;
+			}
+
+			template<typename T> T norm(std::vector<T> m1, T exponent)
+			{
+				T result = 0;
+				int mSize = (int)m1.size();
+				for (int i = 0; i < mSize; i++)
+				{
+					result += pow(gstd::Double::abs(m1[i]), exponent);
+				}
+				result = pow(result, 1 / exponent);
+				return result;
+			}
+
+
             bool MSII810161816_GSTD_API test();
         
         }

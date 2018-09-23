@@ -8,11 +8,11 @@
 #include"stdafx.h"
 
 #include "MatlabMgr.h"
-#include "Primitives.h"
-#include "Linalg.h"
-#include "Matrix.h"
+#include "gstd/src/Primitives.h"
+#include "gstd/src/Linalg.h"
+#include "gstd/src/Matrix.h"
 #include "engine.h"
-#include "Dependencies.h"
+#include "gstd/src/Dependencies.h"
 #include <sstream>
 #include <iostream>
 #include <cmath>

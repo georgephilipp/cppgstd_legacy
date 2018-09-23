@@ -28,44 +28,19 @@ namespace msii810161816
 				close();
 		}
 
-		bool Writer::openInner()
-		{
-			file.open(location, mode);
-			if (file.fail())
-			{
-				file.clear();
-				return false;
-			}
-			return true;
-		}
-
 		void Writer::open()
 		{
 			gstd::check(!fileIsOpen, "cannot open file that is already open");
 			if (safe)
-				gstd::check(!gstd::Reader::verifyExistence({ location })[0], "cannot write to location with existing file in safe mode");
-			for (int i = 0; i < gstd::file::fileOpenBufferReps; i++)
-			{
-				if (openInner())
-				{
-					fileIsOpen = true;
-					return;
-				}
-				else
-					gstd::Timer::sleep(gstd::file::fileOpenBufferDelay);
-			}
-			gstd::error("opening failed at location " + location);			
+				gstd::check(!gstd::file::exists({ location })[0], "cannot write to location with existing file in safe mode");
+			gstd::check(gstd::file::writeopen(&file, location, mode), "opening failed at location " + location);
+			fileIsOpen = true;
 		}
 
 		void Writer::close()
 		{
 			gstd::check(fileIsOpen, "cannot close file that is not open");
-			file.close();
-			if (file.fail())
-			{
-				file.clear();
-				gstd::error("closing failed at location " + location);
-			}
+			gstd::check(gstd::file::writeclose(&file), "closing failed at location " + location);
 			fileIsOpen = false;
 		}
 
@@ -73,7 +48,6 @@ namespace msii810161816
 		{
 			return fileIsOpen;
 		}
-
 
 		//Base Package
 		TypeName Writer::getTypeName()

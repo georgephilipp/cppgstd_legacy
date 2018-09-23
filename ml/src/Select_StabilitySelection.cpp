@@ -8,7 +8,7 @@
 #include "stdafx.h"
 
 #include "StabilitySelection.h"
-#include "gstd/src/MatlabMgr.h"
+#include "gstd_matlab/src/MatlabMgr.h"
 
 namespace msii810161816
 {

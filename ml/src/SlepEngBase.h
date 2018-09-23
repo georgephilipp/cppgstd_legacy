@@ -5,7 +5,7 @@
 #define	SLEPENGBASE_H
 
 #include "standard.h"
-#include "gstd/src/MatlabMgr.h"
+#include "gstd_matlab/src/MatlabMgr.h"
 #include "SelectionModel.h"
 
 namespace msii810161816

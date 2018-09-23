@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "LinearRegression.h"
-#include "gstd/src/MatlabMgr.h"
+#include "gstd_matlab/src/MatlabMgr.h"
 #include "gstd/src/Linalg.h"
 #include "gstd/src/Stat.h"
 #include "gstd/src/Timer.h"

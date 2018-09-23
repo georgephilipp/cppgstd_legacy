@@ -175,7 +175,7 @@ namespace msii810161816
                         int subN = sub->client.get(false)->minfail;
                         double mean = assignfraction*N;
                         double std = sqrt(assignfraction*(1-assignfraction)*N);
-                        gstd::check(abs(((double)subN - mean)/std) < 5, "incorrect submodel data set size");
+						gstd::check(((double)subN - mean) / std < 5 && ((double)subN - mean) / std > -5, "incorrect submodel data set size");
                     }
                                         
                     //set submodel to enable processing                    

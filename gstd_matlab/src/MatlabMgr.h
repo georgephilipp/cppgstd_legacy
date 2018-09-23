@@ -15,9 +15,9 @@
 #define	MATLABMGR_H
 
 #include"standard.h"
-#include"ex.h"
-#include"Base.h"
-#include "Pointer.h"
+#include"gstd/src/ex.h"
+#include"gstd/src/Base.h"
+#include "gstd/src/Pointer.h"
 
 namespace msii810161816
 {   
@@ -27,7 +27,7 @@ namespace msii810161816
 		struct MatlabEnginePimpl;
 
 		//MatlabSession
-		class MSII810161816_GSTD_API MatlabSession : public virtual Base
+		class MSII810161816_GSTD_MATLAB_API MatlabSession : public virtual Base
 		{
 			friend MatlabMgr;
 
@@ -54,7 +54,7 @@ namespace msii810161816
 
 		};
 
-		class MSII810161816_GSTD_API MatlabMgr : public virtual Base
+		class MSII810161816_GSTD_MATLAB_API MatlabMgr : public virtual Base
 		{
 		public:
 			MatlabMgr();

@@ -29,7 +29,7 @@ endif
 ###COMPILER###
 CC = 
 ifeq ($(OSNAME),LINUX)
-    CC = /opt/gcc/4.7.3/bin/g++
+    CC = g++
 else ifeq ($(OSNAME),OSX)
     CC = clang++ -stdlib=libc++
 endif
@@ -49,19 +49,8 @@ else ifeq ($(OSNAME),OSX)
 endif
 
 ###DEPS###
-GLIBLINK = -Wl,-rpath,/opt/gcc/4.7.3/lib64/
-MATLABINCLUDELINUX = -I/usr0/home/gschoenh/Installs/MATLAB/R2013a/extern/include
-MATLABINCLUDECOGITO = -I/opt/matlab/8.1/extern/include
-MATLABINCLUDEMAC = -I/Applications/MATLAB_R2014a.app/extern/include
-MATLABLINKSYSLINUX = -L/usr0/home/gschoenh/Installs/MATLAB/R2013a/sys/os/glnxa64 -Wl,-rpath,/usr0/home/gschoenh/Installs/MATLAB/R2013a/sys/os/glnxa64
-MATLABLINKSYSCOGITO = -L/opt/matlab/8.1/sys/os/glnxa64 -Wl,-rpath,/opt/matlab/8.1/sys/os/glnxa64
-MATLABLINKLINUX = -L/usr0/home/gschoenh/Installs/MATLAB/R2013a/bin -L/usr0/home/gschoenh/Installs/MATLAB/R2013a/bin/glnxa64 -L/usr0/home/gschoenh/Installs/MATLAB/R2013a/extern/lib/glnxa64 -Wl,-rpath,/usr0/home/gschoenh/Installs/MATLAB/R2013a/bin/glnxa64,-rpath,/usr0/home/gschoenh/Installs/MATLAB/R2013a/bin/glnxa64,-rpath,/usr0/home/gschoenh/Installs/MATLAB/R2013a/bin,-rpath,/usr0/home/gschoenh/Installs/MATLAB/R2013a/extern/lib/glnxa64
-MATLABLINKCOGITO = -L/opt/matlab/8.1/bin -L/opt/matlab/8.1/bin/glnxa64 -L/opt/matlab/8.1/extern/lib/glnxa64 -Wl,-rpath,/opt/matlab/8.1/bin,-rpath,/opt/matlab/8.1/bin/glnxa64,-rpath,/opt/matlab/8.1/extern/lib/glnxa64
-MATLABLINKMAC = -L/Applications/MATLAB_R2014a.app/bin -L/Applications/MATLAB_R2014a.app/bin/maci64 -L/Applications/MATLAB_R2014a.app/extern/lib/maci64 -Wl,-rpath,/Applications/MATLAB_R2014a.app/bin,-rpath,/Applications/MATLAB_R2014a.app/bin/maci64,-rpath,/Applications/MATLAB_R2014a.app/extern/lib/maci64
-MATLABLIBS = -leng -lmat -lmx
-
-INCLUDE = $(MATLABINCLUDELINUX) $(MATLABINCLUDECOGITO) $(MATLABINCLUDEMAC)
-LINK = $(MATLABLINKLINUX) $(MATLABLINKCOGITO) $(MATLABLINKMAC) $(MATLABLIBS)
+INCLUDE =
+LINK =
 
 ###TARGETS###
 $(OUTFILE): $(OBJECTS)

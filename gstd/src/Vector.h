@@ -14,6 +14,7 @@
 #include <functional>
 #include <algorithm>
 #include"Printer.h"
+#include"Rand.h"
 #ifndef VECTOR_H
 #define	VECTOR_H
 
@@ -257,6 +258,17 @@ namespace msii810161816
 						res[i][j] = fun(input[i][j]);
 					}
 				}
+				return res;
+			}
+
+			template<typename type>
+			std::vector<type> shuffle(std::vector<type> input)
+			{
+				int size = (int)input.size();
+				std::vector<int> perm = gstd::Rand::perm(size, size);
+				std::vector<type> res;
+				for (int i = 0; i < size; i++)
+					res.push_back(input[perm[i]]);
 				return res;
 			}
 

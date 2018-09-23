@@ -34,7 +34,6 @@ namespace msii810161816
             void open();
             void close();   
 			bool fileIsOpen();
-			bool fileExists();
 			gstd::trial<std::string> line(int index = -1);
                         template<typename type>
                         gstd::trial<std::vector<type> > row(int index = -1)
@@ -50,10 +49,7 @@ namespace msii810161816
             res.result = gstd::Parser::vector<type>(l.result, delimiter);
             return res;            
         }
-            
-			static bool exists(std::string location);
-			static std::vector<bool> verifyExistence(std::vector<std::string> locations);
-			static int numRows(std::string location);
+            			static int numRows(std::string location);
                         static std::vector<std::string> ls(std::string location);
                         template<typename type>
                         static std::vector<std::vector<type> > rs(std::string location, char delimiter)

@@ -291,7 +291,8 @@ namespace msii810161816
             
             double randnorm(int mode)
             {
-                double lowerRand = normcuminv(gstd::Rand::d(mode) * 0.5);
+				double uniformRand = gstd::Rand::d(mode);
+                double lowerRand = normcuminv(uniformRand * 0.5);
                 int upper = gstd::Rand::i(2);
                 if(upper == 0)
                     return lowerRand;

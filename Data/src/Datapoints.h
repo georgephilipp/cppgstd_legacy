@@ -31,6 +31,11 @@ namespace msii810161816
         struct MSII810161816_DATA_API DpInts {
             std::vector<int> content;
         };
+
+		template<typename T> struct DpTensor {
+			std::vector<T> content;
+			std::vector<int> dimensions;
+		};
         
         template<typename from, typename to>
         struct DpConverter

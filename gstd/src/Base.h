@@ -51,7 +51,11 @@ namespace msii810161816
             virtual void setInputs() = 0;
             virtual bool test() = 0;
             virtual std::string toString() = 0;
-            void reportFailure(std::string extraMessage = "");            
+            void reportFailure(std::string extraMessage = ""); 
+			void reportFailure(int counter);
+
+		protected:
+			void copy(gstd::Base* target);
         };
         
         template<>

@@ -5,7 +5,7 @@
 #define	SLEPBBASE_H
 
 #include "standard.h"
-#include "gstd/src/TerminalMgr.h"
+#include "gstd_matlab/src/TerminalMgr.h"
 #include "SelectionModel.h"
 
 namespace msii810161816

@@ -28,7 +28,7 @@ endif
 ###COMPILER###
 CC = 
 ifeq ($(OSNAME),LINUX)
-    CC = /opt/gcc/4.7.3/bin/g++
+    CC = g++
 else ifeq ($(OSNAME),OSX)
     CC = clang++ -stdlib=libc++
 endif
@@ -48,9 +48,8 @@ else ifeq ($(OSNAME),OSX)
 endif
 
 ###DEPS###
-GLIBLINK = -Wl,-rpath,/opt/gcc/4.7.3/lib64/
 INCLUDE = -I./../../libs
-LINK = -L./../../libs -Wl,-rpath,./../../libs -lgstd -ldata $(GLIBLINK)
+LINK = -L./../../libs -Wl,-rpath,./../../libs -lgstd -ldata -lgstd_matlab
 
 $(OUTFILE): $(OBJECTS)
 	$(CC) $(LIBFLAGS) $(OBJECTS) -o $(OUTFILE) $(LINK)

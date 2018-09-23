@@ -4,7 +4,7 @@
 #ifndef TERMINALMGR_H
 #define TERMINALMGR_H
 #include"standard.h"
-#include"Base.h"
+#include"gstd/src/Base.h"
 
 
 namespace msii810161816
@@ -13,7 +13,7 @@ namespace msii810161816
 	{
 		
 
-		class MSII810161816_GSTD_API TerminalMgr : virtual public Base
+		class MSII810161816_GSTD_MATLAB_API TerminalMgr : virtual public Base
 		{
 		public:
 			TerminalMgr();

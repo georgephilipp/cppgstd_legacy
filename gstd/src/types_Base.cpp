@@ -42,6 +42,17 @@ namespace msii810161816
         {
             gstd::Printer::c(getTypeName().toString() + " failed test " + extraMessage + " " + toString());
         }
+
+		void Base::reportFailure(int counter)
+		{
+			gstd::Printer::c(getTypeName().toString() + " failed test " + gstd::Printer::p(counter) + " " + toString());
+		}
+
+		void Base::copy(gstd::Base* target)
+		{
+			target->doc = doc;
+			target->safe = safe;
+		}
         
         namespace base
         {

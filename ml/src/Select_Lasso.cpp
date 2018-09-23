@@ -167,7 +167,7 @@ namespace msii810161816
                         }
                         double deriv = (delta - base)/margin/2/N;
                         if(setzero)
-                            gstd::check(abs(deriv) < 1.01 * lambda, "gradient check failed");
+							gstd::check(deriv < 1.01 * lambda && -deriv < 1.01 * lambda, "gradient check failed");
                         else if(parameter[i] > 0)
                             gstd::check( ( - 0.99 * lambda > deriv ) && - 1.01 * lambda < deriv, "gradient check failed" );
                         else

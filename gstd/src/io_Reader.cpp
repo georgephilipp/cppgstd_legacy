@@ -29,43 +29,18 @@ namespace msii810161816
 			if (position >= 0)
 				close();
 		}
-
-		bool Reader::openInner()
-		{
-			file.open(location);
-			if (file.fail())
-			{
-				file.clear();
-				return false;
-			}
-			return true;
-		}
         
         void Reader::open()
         {
 			gstd::check(!fileIsOpen(), "cannot open file that is already open");
-			for (int i = 0; i < gstd::file::fileOpenBufferReps; i++)
-			{
-				if (openInner())
-				{
-					position = 0;
-					return;
-				}
-				else
-					gstd::Timer::sleep(gstd::file::fileOpenBufferDelay);
-			}
-			gstd::error("Reader failed to open file " + location);            
+			gstd::check(gstd::file::open(&file, location), "Reader failed to open file " + location);
+			position = 0;
         }
         
         void Reader::close()
         {
 			gstd::check(fileIsOpen(), "cannot close file that is not open");
-            file.close();
-			if (file.fail())
-			{
-				file.clear();
-				gstd::error("Reader failed to close file " + location);
-			}
+			gstd::check(gstd::file::close(&file), "Reader failed to close file " + location);
             position = -1;
         }
 
@@ -74,20 +49,6 @@ namespace msii810161816
 			return (position >= 0);
 		}
 
-		bool Reader::fileExists()
-		{
-			file.open(location);
-			if (file.fail())
-			{
-				file.clear();
-				return false;
-			}
-			else
-			{
-				file.close();
-				return true;
-			}
-		}
         
         gstd::trial<std::string> Reader::line( int index /*=-1*/ )
         {
@@ -129,44 +90,6 @@ namespace msii810161816
             
             return res;
         }     
-        
-		bool Reader::exists(std::string location)
-		{
-			Reader reader;
-			reader.location = location;
-			return reader.fileExists();
-		}
-
-		std::vector<bool> Reader::verifyExistence(std::vector<std::string> locations)
-		{
-			int size = locations.size();
-			std::vector<Reader> readers(size);
-			for (int i = 0; i < size; i++)
-			{
-				readers[i].location = locations[i];
-			}
-			std::vector<double> probabilities(size, 0);
-			double increment = 1 / (double)file::fileOpenBufferReps;
-			std::vector<bool> res(size, false);
-			for (int j = 0; j < file::fileOpenBufferReps; j++)
-			{
-				for (int i = 0; i < size; i++)
-				{
-					if (readers[i].fileExists())
-						probabilities[i] += increment;
-				}
-				if (j + 1 != file::fileOpenBufferReps)
-					gstd::Timer::sleep(file::fileOpenBufferDelay);					
-			}
-			for (int i = 0; i < size; i++)
-			{
-				if (probabilities[i] < 0.5)
-					res[i] = false;
-				else
-					res[i] = true;
-			}
-			return res;
-		}
                 
                 int Reader::numRows(std::string location)
                 {
@@ -248,11 +171,6 @@ namespace msii810161816
 				return false;
 			}
 			catch (std::exception e) {}
-			if (!r.fileExists())
-			{
-				r.reportFailure("Failed Test 5");
-				return false;
-			}
             r.line(1);
 			if (r.position != 2)
 			{
@@ -272,29 +190,6 @@ namespace msii810161816
 				r.reportFailure("Failed Test 8");
                 return false;
             }
-			r.location = "This is not a valid location";
-			if (r.fileExists())
-			{
-				r.reportFailure("Failed Test 9");
-				return false;
-			}
-			if (!Reader::exists(testFileName))
-			{
-				r.reportFailure("Failed Test 10");
-				return false;
-			}
-			if (Reader::exists("This is not a valid location"))
-			{
-				r.reportFailure("Failed Test 11");
-				return false;
-			}
-			Timer t;
-			std::vector<bool> res = Reader::verifyExistence({ testFileName, "This is not a valid location" });
-			if (res != std::vector<bool>({ true, false }) || t.t(false) < file::fileOpenBufferDelay*((double)(file::fileOpenBufferReps - 1)) || t.t(false) > file::fileOpenBufferDelay*((double)file::fileOpenBufferReps))
-			{
-				r.reportFailure("Failed Test 12");
-				return false;
-			}
 			std::vector<std::string> target({ "1,2,3", "blabla,bla" });
 			std::vector<std::string> out = Reader::ls(testFileName);
 			if (out != target)

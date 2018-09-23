@@ -20,6 +20,17 @@ namespace msii810161816
     {   
         namespace Linalg
         {
+			bool mequals(std::vector<double> m1, std::vector<double> m2, double margin /*= 1e-15*/, bool relative /*= true*/)
+			{
+				int size = m1.size();
+				if ((int)m2.size() != size)
+					gstd::error("cannot compare vectors of unequal size for equality");
+				for (int i = 0; i<size; i++)
+				if (!gstd::Double::equals(m1[i], m2[i], margin, relative))
+					return false;
+				return true;
+			}
+
             std::vector<double> mabs(std::vector<double>& m1)
             {
                 int size = m1.size();
@@ -79,17 +90,6 @@ namespace msii810161816
                 return res;
             }    
 
-            bool mequals(std::vector<double> m1, std::vector<double> m2, double margin /*= 1e-15*/, bool relative /*= true*/)
-            {
-                int size = m1.size();
-                if( (int)m2.size() != size )
-                    gstd::error("cannot compare vectors of unequal size for equality");
-                for(int i=0;i<size;i++)
-                    if(!gstd::Double::equals(m1[i], m2[i], margin, relative))
-                        return false;
-                return true;              
-            }
-            
             std::vector<double> mprod(std::vector<double>& m1, std::vector<double>& m2)
             {
                 int size = m1.size();
@@ -266,18 +266,18 @@ namespace msii810161816
             {
                 gstd::Printer::c("This is the test for the gstd::Linalg group of functions");
                 
-                //equals
-                {
-                    std::vector<double> input1 = {1};
-                    std::vector<double> input2 = {1.0000000000000002};
-                    std::vector<double> input3 = {1.000000000000002};
-                    if(!mequals(input1, input2) || mequals(input1, input3))
-                    {
-                        gstd::reportFailure("gstd::Linalg::mequals");
-                        return false;
-                    }
-                }
-                
+				//mequals
+				{
+					std::vector<double> input1 = { 1 };
+					std::vector<double> input2 = { 1.0000000000000002 };
+					std::vector<double> input3 = { 1.000000000000002 };
+					if (!mequals(input1, input2) || mequals(input1, input3))
+					{
+						gstd::reportFailure("gstd::Linalg::mequals");
+						return false;
+					}
+				}
+
                 //mabs
                 {
                     std::vector<double> input = {0,1,-2,3,-4};
@@ -480,7 +480,7 @@ namespace msii810161816
 								target[i*dim + j] = 0;
 						}
 					}
-                                        std::vector<double> transposed = transpose(dim, dim, target);
+					std::vector<double> transposed = transpose(dim, dim, target);
 					std::vector<double> input = mmult(dim, dim, dim, transposed, target);
 					std::vector<double> out = cholesky(input);
 					if (!mequals(out, target, 1e-10, false))
@@ -490,6 +490,102 @@ namespace msii810161816
 					}
 				}
 
+				//equals
+				{
+					std::vector<double> input1 = { 1 };
+					std::vector<double> input2 = { 1.0000000000000002 };
+					std::vector<double> input3 = { 1.000000000000002 };
+					if (!mequals(input1, input2) || mequals(input1, input3))
+					{
+						gstd::reportFailure("gstd::Linalg::mequals");
+						return false;
+					}
+				}
+
+				//equals
+				{
+					std::vector<double> m1 = { 1, 2, 3 };
+					std::vector<double> m2 = { 1 + 0.75*1e-15, 2, 3 };
+					std::vector<double> m3 = { 1, 2 + 0.2 * 1e-15, 3 };
+					std::vector<double> m4 = { 1, 2 + 0.8*1e-15, 3 };
+					std::vector<double> m5 = { 1, 2 + 2.5 * 1e-15, 3 };
+					if (!equals<double>(m1, m2, 1e-15))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 1.1");
+						return false;
+					}
+					if (!equals(m1, m3, 1e-15))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 1.2");
+						return false;
+					}
+					if (!equals(m1, m4, 1e-15))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 1.3");
+						return false;
+					}
+					if (!equals(m3, m4, 1e-15))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 1.4");
+						return false;
+					}
+					if (!equals(m4, m5, 1e-15))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 1.5");
+						return false;
+					}
+					if (equals(m1, m5, 1e-15))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 1.6");
+						return false;
+					}
+
+					if (!equals<double>(m1, m2, 1e-15, false))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 2.1");
+						return false;
+					}
+					if (!equals(m1, m3, 1e-15, false))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 2.2");
+						return false;
+					}
+					if (!equals(m1, m4, 1e-15, false))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 2.3");
+						return false;
+					}
+					if (!equals(m3, m4, 1e-15, false))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 2.4");
+						return false;
+					}
+					if (equals(m4, m5, 1e-15, false))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 2.5");
+						return false;
+					}
+					if (equals(m1, m5, 1e-15, false))
+					{
+						gstd::reportFailure("gstd::Linalg::equals, test 2.6");
+						return false;
+					}
+				}
+
+				//norm
+				{
+					std::vector<double> m1 = { 0, 1, -1, 2, -2 };
+					if (!gstd::Double::equals(norm(m1, 1.0), 6, 1e-14))
+					{
+						gstd::reportFailure("gstd::Linalg::norm, t1");
+						return false;
+					}
+					if (!gstd::Double::equals(norm(m1, 2.0), sqrt(10), 1e-14))
+					{
+						gstd::reportFailure("gstd::Linalg::norm, t2");
+						return false;
+					}
+				}
                
                 return true;
             }

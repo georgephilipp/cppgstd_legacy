@@ -2,7 +2,7 @@
 
 #include "SlepEngBase.h"
 #include "gstd/src/Vector.h"
-#include "gstd/src/MatlabMgr.h"
+#include "gstd_matlab/src/MatlabMgr.h"
 #include "gstd/src/Linalg.h"
 #include "gstd/src/Dependencies.h"
 

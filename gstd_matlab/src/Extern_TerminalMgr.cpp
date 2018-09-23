@@ -1,14 +1,14 @@
 #include "stdafx.h"
 
 #include "TerminalMgr.h"
-#include "Writer.h"
-#include "ex.h"
-#include "Vector.h"
-#include "Timer.h"
-#include "Reader.h"
-#include "Linalg.h"
-#include "File.h"
-#include "Dependencies.h"
+#include "gstd/src/Writer.h"
+#include "gstd/src/ex.h"
+#include "gstd/src/Vector.h"
+#include "gstd/src/Timer.h"
+#include "gstd/src/Reader.h"
+#include "gstd/src/Linalg.h"
+#include "gstd/src/File.h"
+#include "gstd/src/Dependencies.h"
 
 namespace msii810161816
 {
@@ -61,7 +61,7 @@ namespace msii810161816
 				removables.push_back(internalPath + outHeaderFileNames[i]);
 			for (int i = 0; i < numOutDatas; i++)
 				removables.push_back(internalPath + outDataFileNames[i]);
-			gstd::file::remove(removables, false, safe);
+			gstd::checkMany(gstd::file::remove(removables, false, safe), "could not remove removeables");
 		}
 
 		gstd::trial<std::vector<std::string> > TerminalMgr::run()
@@ -96,7 +96,7 @@ namespace msii810161816
 			//do the precleaning
 			if (safe)
 			{
-				std::vector<bool> ex = gstd::Reader::verifyExistence(precleanables);
+				std::vector<bool> ex = gstd::file::exists(precleanables);
 				int size = ex.size();
 				for (int i = 0; i < size; i++)
 				{
@@ -104,7 +104,7 @@ namespace msii810161816
 				}
 			}
 			else
-				gstd::file::remove(precleanables, false, safe);
+				gstd::checkMany(gstd::file::remove(precleanables, false, safe), "could not remove precleanables");
 			
 			//write the data
 			for (int i = 0; i < numHeaders; i++)
@@ -175,7 +175,7 @@ namespace msii810161816
 			Timer t;
 			while (1)
 			{
-				if (Reader::exists(completionPath))
+				if (gstd::file::exists({ completionPath })[0])
 					break;
 				gstd::check(t.t(false) < maxWaitTime, "waiting for external function call timed out");
 				gstd::Timer::sleep(0.1);
@@ -199,7 +199,7 @@ namespace msii810161816
 			command = command + " >> " + outFileNameExternal;
 			int dummy = std::system(command.c_str());
 			(void)dummy;
-                        if (!gstd::Reader::verifyExistence({ outFileNameInternal })[0])
+                        if (!gstd::file::exists({ outFileNameInternal })[0])
 			{
 				res.success = false;
 				return res;

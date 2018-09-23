@@ -59,7 +59,7 @@ namespace msii810161816
             std::chrono::steady_clock::time_point time = now();
             //std::chrono::duration<double> chrdiff = time - starttime;
             std::chrono::steady_clock::duration chrdiff = time - starttime;
-            double diff = chrdiff.count();
+            double diff = (double)chrdiff.count();
 #ifdef _WIN32
 			diff = diff*1e-7;
 #else

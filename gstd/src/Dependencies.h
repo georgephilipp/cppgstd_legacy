@@ -5,6 +5,7 @@
 #define DEPENDENCIES_H
 #include"standard.h"
 #include "Reader.h"
+#include "File.h"
 #include<array>
 
 
@@ -20,7 +21,7 @@ namespace msii810161816
 				std::vector<std::string> vecRoots;
 				for (int i = 0; i < (int)numRoots; i++)
 					vecRoots.push_back(roots[i] + tail);
-				std::vector<bool> res = gstd::Reader::verifyExistence(vecRoots);
+				std::vector<bool> res = gstd::file::exists(vecRoots);
 				for (int i = 0; i < (int)numRoots; i++)
 				{
 					if (res[i])

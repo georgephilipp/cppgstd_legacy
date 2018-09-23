@@ -27,22 +27,166 @@ namespace msii810161816
 				else
 					return path1 + "/" + path2;
 			}
+			bool open(std::ifstream *stream, std::string location, int reps /*= fileOpenBufferReps*/, double delay /*= fileOpenBufferDelay*/)
+			{
+				for (int i = 0; i < reps; i++)
+				{
+					stream->open(location);
+					if (stream->fail())
+					{
+						stream->clear();
+						if (i + 1 == reps)
+							return false;
+						else
+							gstd::Timer::sleep(delay);
+					}
+					else
+						break;
+				}
+				return true;
+			}
 
-			void remove(std::vector<std::string> paths, bool enforceBefore, bool enforceAfter)
+			bool writeopen(std::ofstream *stream, std::string location, std::ios_base::openmode mode, int reps /*= fileOpenBufferReps*/, double delay /*= fileOpenBufferDelay*/)
+			{
+				for (int i = 0; i < reps; i++)
+				{
+					stream->open(location, mode);
+					if (stream->fail())
+					{
+						stream->clear();
+						if (i + 1 == reps)
+							return false;
+						else
+							gstd::Timer::sleep(delay);
+					}
+					else
+						break;
+				}
+				return true;
+			}
+			bool close(std::ifstream *stream, int reps /*= fileOpenBufferReps*/, double delay /*= fileOpenBufferDelay*/)
+			{
+				for (int i = 0; i < reps; i++)
+				{
+					stream->close();
+					if (stream->fail())
+					{
+						stream->clear();
+						if (i + 1 == reps)
+							return false;
+						else
+							gstd::Timer::sleep(delay);
+					}
+					else
+						break;
+				}
+				return true;
+			}
+			bool writeclose(std::ofstream *stream, int reps /*= fileOpenBufferReps*/, double delay /*= fileOpenBufferDelay*/)
+			{
+				for (int i = 0; i < reps; i++)
+				{
+					stream->close();
+					if (stream->fail())
+					{
+						stream->clear();
+						if (i + 1 == reps)
+							return false;
+						else
+							gstd::Timer::sleep(delay);
+					}
+					else
+						break;
+				}
+				return true;
+			}
+			std::vector<double> existsProbabilities(std::vector<std::string> locations, int reps /*= fileOpenBufferReps*/, double delay /*= fileOpenBufferDelay*/)
+			{
+				int size = (int)locations.size();
+				double increment = 1 / (double)reps;
+				std::vector<double> probabilities(size, 0);
+				
+
+				for (int i = 0; i < reps; i++)
+				{
+					//we regenerate the streams instead of closing them
+					std::vector<std::ifstream> streams(size);
+					std::vector<bool> success(size);
+					for (int j = 0; j < size; j++)
+					{
+						success[j] = open(&streams[j], locations[j], 1, 0);
+						if (success[j])
+						{
+							probabilities[j] += increment;
+						}
+					}
+					//internal closing loop
+					/*{
+						std::vector<bool> closingSuccess = success;
+						for (int j = 0; j < size; j++)
+							closingSuccess[j] = !closingSuccess[j];
+						for (int k = 0; k < reps; k++)
+						{
+							bool failsRemain = false;
+							for (int j = 0; j < size; j++)
+							{
+								if (!closingSuccess[j])
+								{
+									streams[j].close();
+									if (streams[j].fail())
+									{
+										streams[j].clear();
+										failsRemain = true;
+									}
+									else
+										closingSuccess[j] = true;
+								}
+							}
+							if (failsRemain)
+							{
+								if (k + 1 < reps)
+									gstd::Timer::sleep(delay);
+								else
+									gstd::error("cannot procede with file existence check due to closing error");
+							}	
+						}			
+					}*/
+					//end closing loop
+					if (i + 1 < reps)
+					    gstd::Timer::sleep(delay);
+				}
+				return probabilities;
+			}
+			std::vector<bool> exists(std::vector<std::string> locations, int reps /*= fileOpenBufferReps*/, double delay /*= fileOpenBufferDelay*/)
+			{
+				int size = (int)locations.size();
+				std::vector<bool> res(size, false);
+				std::vector<double> probabilities = existsProbabilities(locations, reps, delay);
+				for (int i = 0; i < size; i++)
+				{
+					if (probabilities[i] < 0.5)
+						res[i] = false;
+					else
+						res[i] = true;
+				}
+				return res;
+			}
+
+			std::vector<bool> remove(std::vector<std::string> paths, bool enforceBefore, bool enforceAfter, int reps /*= fileOpenBufferReps*/, double delay /*= fileOpenBufferDelay*/)
 			{
 				int size = paths.size();
 				if (enforceBefore)
 				{
-					std::vector<bool> existsBefore = gstd::Reader::verifyExistence(paths);
-					for (int i = 0; i < size;i++)
+					std::vector<bool> existsBefore = exists(paths, reps, delay);
+					for (int i = 0; i < size; i++)
 						gstd::check(existsBefore[i], "cannot remove file that does not exist : filname is " + paths[i]);
 				}
 				for (int i = 0; i < size; i++)
-			    	::remove(paths[i].c_str());
+					::remove(paths[i].c_str());
 				if (!enforceAfter)
-					return;
+ 					return std::vector<bool>(size, true);
 				std::vector<bool> remains(size, true);
-				for (int j = 0; j < gstd::file::fileOpenBufferReps; j++)
+				for (int j = 0; j < reps; j++)
 				{
 					if (j > 0)
 					{
@@ -52,25 +196,63 @@ namespace msii810161816
 								::remove(paths[i].c_str());
 						}
 					}
-					remains = gstd::Reader::verifyExistence(paths); //this call could lead to quadratic blowup in waiting time in theory, but we'll leave it until it becomes an issue
-					bool removedall = true;
+					std::vector<std::string> remainingPaths;
 					for (int i = 0; i < size; i++)
 					{
 						if (remains[i])
-							removedall = false;
+							remainingPaths.push_back(paths[i]);
 					}
-					if (!removedall)
-						gstd::Timer::sleep(gstd::file::fileOpenBufferDelay);
+					std::vector<bool> remainingPathRemains = gstd::file::exists(remainingPaths, 1, 0);
+					bool somethingRemains = false;
+					for (int i = 0; i < size; i++)
+					{
+						int index = 0;
+						if (remains[i])
+						{
+							remains[i] = remainingPathRemains[index];
+							if (remains[i])
+								somethingRemains = true;
+							index++;
+						}
+					}
+					if (somethingRemains && j + 1 < reps)
+						gstd::Timer::sleep(delay);
 					else
-						return;
+					{
+						std::vector<bool> res;
+						for (int k = 0; k < size; k++)
+							res.push_back(!remains[k]);
+						return res;
+					}
 				}
-				for (int i = 0; i < size; i++)
-					gstd::check(!remains[i], "could not remove file " + paths[i]);
+				return std::vector<bool>(size, false);
 			}
 
 			std::string getTestFileName()
 			{
 				return gstd::dependencies::cpp::getHome() + "libs/gstd/src/FileTestFile.txt";
+			}
+
+			bool isAcceptableProb(std::vector<double> probs, std::vector<bool> results)
+			{
+				double tolerance = 0.2;
+
+				if (probs.size() != results.size())
+					return false;
+				for (int i = 0; i < (int)probs.size(); i++)
+				{
+					if (results[i])
+					{
+						if (probs[i] > 1.000001 || probs[i] < 1 - tolerance)
+							return false;
+					}
+					else
+					{
+						if (probs[i] < -0.000001 || probs[i] > tolerance)
+							return false;
+					}
+				}
+				return true;
 			}
 
 			bool test()
@@ -121,51 +303,149 @@ namespace msii810161816
 					catch (std::exception e) {}
 				}
 
+				//opening, closing and file existence
+				std::ifstream stream;
+				std::ofstream writestream;
+				std::string testFileName = getTestFileName();
+				if (open(&stream, testFileName))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 1");
+					return false;
+				}
+				if (close(&stream))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 2");
+					return false;
+				}
+				if (writeclose(&writestream))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 4");
+					return false;
+				}
+				if (exists({ testFileName, "This is not a valid location" }) != std::vector<bool>({ false, false }))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 5");
+					return false;
+				}
+				if (exists({ testFileName, "This is not a valid location" }, 7, 0.01) != std::vector<bool>({ false, false }))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 5");
+					return false;
+				}
+				if (!isAcceptableProb(existsProbabilities({ testFileName, "This is not a valid location" }),std::vector<bool>({ false, false })))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 5");
+					return false;
+				}
+				if (!isAcceptableProb(existsProbabilities({ testFileName, "This is not a valid location" }, 50, 0.01), std::vector<bool>({ false, false })))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 5");
+					return false;
+				}
+				if (!writeopen(&writestream, testFileName, std::ios_base::trunc))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 5");
+					return false;
+				}
+				if (writeopen(&writestream, testFileName, std::ios_base::trunc))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 5");
+					return false;
+				}
+				writeclose(&writestream);
+				if (exists({ testFileName, "This is not a valid location", testFileName }) != std::vector<bool>({ true, false, true }))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 12");
+					return false;
+				}
+				if (exists({ testFileName, "This is not a valid location", testFileName }, 5, 0.1) != std::vector<bool>({ true, false, true }))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 12");
+					return false;
+				}
+				if (!isAcceptableProb(existsProbabilities({ testFileName, "This is not a valid location", testFileName }), std::vector<bool>({ true, false, true })))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 12");
+					return false;
+				}
+				if (!isAcceptableProb(existsProbabilities({ testFileName, "This is not a valid location", testFileName }, 50, 0.01), std::vector<bool>({ true, false, true })))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 12");
+					return false;
+				}
+				//gstd::Writer::w(testFileName, "bling", false, std::ios::trunc);
+				if (!open(&stream, testFileName))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 6");
+					return false;
+				}
+				if (open(&stream, testFileName))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 7");
+					return false;
+				}
+				if (!close(&stream))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 8");
+					return false;
+				}
+				if (!writeopen(&writestream, testFileName, std::ios_base::trunc))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 9");
+					return false;
+				}
+				if (writeopen(&writestream, testFileName, std::ios_base::trunc))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 10");
+					return false;
+				}
+				if (!writeclose(&writestream))
+				{
+					gstd::reportFailure("gstd::file::open/close/exists, test 11");
+					return false;
+				}
+				
+
 				//remove
 				{
 					std::string testFileName = getTestFileName();
-					try
+					if (!remove({ testFileName }, false, false)[0])
 					{
-						gstd::Printer::c("Expecting error message ...");
-						remove({ testFileName }, true, false);
 						gstd::reportFailure("gstd::file::remove, test 1");
 						return false;
 					}
-					catch (std::exception e) {}
-					try
-					{
-						remove({ testFileName }, false, false);
-					}
-					catch (std::exception e)
+					if (exists({ testFileName })[0])
 					{
 						gstd::reportFailure("gstd::file::remove, test 2");
 						return false;
 					}
-					gstd::Writer::w(testFileName, "bling", false, std::ios::trunc);
 					try
 					{
-						remove({ testFileName }, true, true);
-						gstd::check(!gstd::Reader::exists(testFileName), "");
-					}
-					catch (std::exception e)
-					{
+						gstd::Printer::c("Expecting error message ...");
+						remove({ testFileName }, true, false);
 						gstd::reportFailure("gstd::file::remove, test 3");
+						return false;
+					}
+					catch (std::exception e) {}
+					if (!remove({ testFileName }, false, false)[0])
+					{
+						gstd::reportFailure("gstd::file::remove, test 4");
 						return false;
 					}
 					gstd::Writer::w(testFileName, "bling", false, std::ios::trunc);
 					try
 					{
-						gstd::Timer t;
-						remove({ testFileName, testFileName, testFileName }, true, true);
-						gstd::Printer::c(file::fileOpenBufferDelay*((double)(file::fileOpenBufferReps - 1)));
-						gstd::Printer::c(file::fileOpenBufferDelay*((double)file::fileOpenBufferReps));
-						t.t();
-						gstd::check(t.t(false) > file::fileOpenBufferDelay*((double)(file::fileOpenBufferReps - 1)) && t.t(false) < file::fileOpenBufferDelay*((double)file::fileOpenBufferReps), "");
-						gstd::check(!gstd::Reader::exists(testFileName), "");
+						gstd::check(remove({ testFileName, testFileName, testFileName }, true, true)[0], "");
+						gstd::check(!gstd::file::exists({ testFileName })[0], "");
 					}
 					catch (std::exception e)
 					{
-						gstd::reportFailure("gstd::file::remove, test 4");
+						gstd::reportFailure("gstd::file::remove, test 5");
+						return false;
+					}
+					if (exists({ testFileName })[0])
+					{
+						gstd::reportFailure("gstd::file::remove, test 6");
 						return false;
 					}
 				}

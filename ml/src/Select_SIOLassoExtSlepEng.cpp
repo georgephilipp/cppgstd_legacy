@@ -3,7 +3,7 @@
 
 
 #include "SIOLassoExtSlepEng.h"
-#include "gstd/src/MatlabMgr.h"
+#include "gstd_matlab/src/MatlabMgr.h"
 #include "gstd/src/Linalg.h"
 #include "Data/src/Converters.h"
 #include "gstd/src/Primitives.h"
